@@ -60,14 +60,27 @@ class Rules:
         return self.stack[-1].region
     
     def handle_rule(self):
+        reg = self.stack[-1]
         # If it's a region - close it
-        if self.stack[-1].is_region():
+        if reg.is_region():
+            # Or if has interpolation sequence - open new
+            if reg.interp != None:
+                interp = self.get_rule_by_name(reg.interp)
+                rule = self.get_rule_by_start(self.chunk.get())
+                if rule and rule.start == interp.start:
+                    self.stack.append(rule)
+                    return True
             rule = self.get_rule_by_end(self.chunk.get())
-            if rule and rule.name == self.stack[-1].name:
+            if rule and rule.name == reg.name:
                 self.stack.pop()
                 return True
         else:
-            # Check if it's an interpolation and can be closed
+            # Check if it's an interpolation and if it can be closed
+            if not reg.region and reg.end:
+                rule = self.get_rule_by_end(self.chunk.get())
+                if rule:
+                    self.stack.pop()
+                    return True
             rule = self.get_rule_by_start(self.chunk.get())
             if rule:
                 self.stack.append(rule)

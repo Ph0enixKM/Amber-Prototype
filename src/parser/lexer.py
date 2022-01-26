@@ -53,11 +53,12 @@ if __name__ == '__main__':
     code = [
         'let test a  this   = 12',
         'if a == 12 {',
-        '    $ echo \'hello world\'',
+        '    $ echo \'hello this {test} beautiful world\'',
         '}'
     ]
     lexem = lexer('\n'.join(code))
     test_positioner('\n'.join(code), lexem)
 
-    # for tok in lexem:
-    #     print(tok)
+    for tok in lexem:
+
+        print(tok)

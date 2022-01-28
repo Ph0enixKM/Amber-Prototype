@@ -5,7 +5,7 @@ from .rules import Rules
 
 class Lexer:
     def __init__(self, code):
-        self.symbols = ['\n', '\'', '{', '}', '(', ')', '[', ']', '*', '+', '=', '-', '%', ':']
+        self.symbols = ['\n', '\'', '{', '}', '(', ')', '[', ']', '*', '+', '=', '-', '%', ':', ',']
         self.asi_symbols = (['(', '['], [')', ']'])
         self.code = code
         self.pos = FileIterator()

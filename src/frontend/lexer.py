@@ -1,0 +1,89 @@
+from .tok import Token
+from .file_iterator import FileIterator
+from .rules import Rules
+
+
+class Lexer:
+    def __init__(self, code):
+        self.symbols = ['\n', '\'', '{', '}', '(', ')', '[', ']', '*', '+', '=', '-', '%']
+        self.asi_symbols = (['(', '['], [')', ']'])
+        self.code = code
+        self.pos = FileIterator()
+        self.rules = Rules(self.code, self.pos)
+        self.lexem = []
+        self.word = ''
+        self.lexer()
+        error = self.asi()
+
+    def add_word(self, same_line = False):
+        if len(self.word):
+            self.lexem.append(
+                Token(*self.pos.get(len(self.word) - same_line), self.word))
+            self.word = ''
+
+    def lexer(self):
+        for letter in self.code:
+            new_rule = self.rules.handle_rule()
+            if not new_rule and self.rules.is_region():
+                self.word += letter
+            else:
+                if letter in [' ', '\t']:
+                    self.add_word()
+                elif letter in self.symbols:
+                    self.add_word()
+                    self.word += letter
+                    self.add_word(True)
+                else:
+                    self.word += letter
+            self.pos.next(letter)
+        self.add_word()
+
+    def asi(self):
+        stack = []
+        new_lexem = []
+        for token in self.lexem:
+            if token.word in self.asi_symbols[0]:
+                index = self.asi_symbols[0].index(token.word)
+                stack.append(index)
+            if token.word in self.asi_symbols[1]:
+                close_symbol = self.asi_symbols[1][stack[-1]]
+                if token.word == close_symbol:
+                    stack.pop()
+                else:
+                    return token
+            if not(len(stack) and token.word == '\n'):
+                new_lexem.append(token)
+        self.lexem = new_lexem
+        return False
+    
+    def get(self):
+        return self.lexem
+
+if __name__ == '__main__':
+    # TODO: Tests
+    def test_positioner(code, lexem):
+        lines = code.split('\n')
+        for token in lexem:
+            if token.word == '\n':
+                continue
+            word = token.word
+            row = token.row
+            col = token.col
+            lookup = lines[row - 1][col - 1:col - 1 + len(word)]
+            if word != lookup:
+                return (
+                    False,
+                    f'({word}) vs ({lookup}) [{row}:{col}]'
+                )
+        return (True, '')
+
+    code = [
+        'let test a  this   = 12',
+        'if a == 12 {',
+        '    $ echo \'hello this {test} beautiful world\'',
+        '}'
+    ]
+    lexem = Lexer('\n'.join(code))
+    # TODO: Create testing utility to display 
+    # successfull and unsuccessfull tests
+    print(test_positioner('\n'.join(code), lexem.get()))

@@ -12,8 +12,8 @@ class Lexer:
         self.rules = Rules(self.code, self.pos)
         self.lexem = []
         self.word = ''
-        self.lexer()
-        error = self.asi()
+        region_error = self.lexer()
+        closure_error = self.asi()
 
     def add_word(self, same_line = False):
         if len(self.word):
@@ -37,6 +37,8 @@ class Lexer:
                     self.word += letter
             self.pos.next(letter)
         self.add_word()
+        if not self.rules.is_base_region():
+            return self.lexem[-1]
 
     def asi(self):
         stack = []
@@ -53,6 +55,8 @@ class Lexer:
                     return token
             if not(len(stack) and token.word == '\n'):
                 new_lexem.append(token)
+        if len(stack):
+            return new_lexem[-1]
         self.lexem = new_lexem
         return False
     

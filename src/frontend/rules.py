@@ -56,6 +56,9 @@ class Rules:
     def get_rule_by_end(self, chunk):
         return self.get_rule_by_tok_str(chunk, lambda r: r.end)
 
+    def is_base_region(self):
+        return len(self.stack) == 1
+
     def is_region(self):
         return self.stack[-1].region
     

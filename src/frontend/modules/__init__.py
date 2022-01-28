@@ -1,1 +1,1 @@
-from .syntax_module import Expression
+from .syntax_module import Block

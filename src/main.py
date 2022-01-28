@@ -1,10 +1,9 @@
 from frontend import Lexer, Parser
+import json
 
-lexer = Lexer('let code = 12')
+lexer = Lexer('\n'.join([
+    'box a = 12',
+    'box b = \'test\''
+]))
 parser = Parser(lexer.get())
-
-
-
-for token in lexer.get():
-    print(token)
-    
+print(json.dumps(parser.get().generate_tree(), indent=4))

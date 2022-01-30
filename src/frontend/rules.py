@@ -29,6 +29,7 @@ class Rules:
             Rule('string_single', '\'', interp='string_interp'),
             Rule('string_interp', '{', '}', region=False),
             Rule('comment', '#', '\n'),
+            Rule('command', '$', '$', interp='string_interp'),
         ]
         self.stack = [self.rules[0]]
         self.begin_rules = list(map(lambda r: r.start, self.rules))

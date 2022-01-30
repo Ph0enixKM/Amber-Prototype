@@ -1,12 +1,19 @@
 from .tok import Token
 from .file_iterator import FileIterator
 from .rules import Rules
+from .closures import ClosureStack
 
 
 class Lexer:
     def __init__(self, code):
-        self.symbols = ['\n', '\'', '{', '}', '(', ')', '[', ']', '*', '+', '=', '-', '%', ':', ',']
-        self.asi_symbols = (['(', '['], [')', ']'])
+        self.symbols = [
+            '\n', '\'', '{', '}',
+            '(', ')', '[', ']',
+            '*', '+', '=', '-',
+            '%', ':', ',', '#',
+            '$'
+        ]
+        self.closures = ClosureStack()
         self.code = code
         self.pos = FileIterator()
         self.rules = Rules(self.code, self.pos)
@@ -44,12 +51,11 @@ class Lexer:
         stack = []
         new_lexem = []
         for token in self.lexem:
-            if token.word in self.asi_symbols[0]:
-                index = self.asi_symbols[0].index(token.word)
-                stack.append(index)
-            if token.word in self.asi_symbols[1]:
-                close_symbol = self.asi_symbols[1][stack[-1]]
-                if token.word == close_symbol:
+            if token.word in self.closures.opening:
+                stack.append(self.closures.get_by_opening(token.word))
+            if token.word in self.closures.closing:
+                closing = stack[-1]
+                if token.word == closing.closing:
                     stack.pop()
                 else:
                     return token

@@ -12,3 +12,6 @@ class Token:
     
     def __str__(self):
         return f'Tok[{self.word}:{self.row}:{self.col}]'
+
+    def __repr__(self):
+        return self.__str__()

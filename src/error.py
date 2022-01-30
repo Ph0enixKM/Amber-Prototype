@@ -3,7 +3,7 @@ from colorama import init, Fore
 from enum import Enum
 init()
 
-debug = True
+debug = False
 
 class ErrorTypes(Enum):
     UNDEF = 'Undefined Syntax'

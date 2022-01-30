@@ -1,5 +1,6 @@
 from copy import copy
 from error import error_tok, ErrorTypes
+from ..closures import ClosureStack
 
 
 class SyntaxModule:
@@ -16,7 +17,7 @@ class SyntaxModule:
         raise 'Undefined Syntax (AST Translation)'
 
     def is_variable_name(self, name):
-        is_alpha = lambda l: l.isalpha() or l in ['_', '$']
+        is_alpha = lambda l: l.isalpha() or l in ['_']
         if not is_alpha(name[0]):
             return False
         for letter in name[1:]:
@@ -35,11 +36,48 @@ class SyntaxModule:
                 return (block, res)
             # Singleline block
             elif tokens[0].word == ':':
+                tokens = self.clear_empty_lines(tokens[1:])
                 st = Statement()
-                res = st.ast(tokens[1:])
+                res = st.ast(tokens)
                 block.statements.append(st)
                 return (block, res)
         return (None, None)
+
+    def parse_shorthand_assignment(self, tokens, op):
+        if len(tokens) >= 3:
+            [name, oper, eq, *rest] = tokens
+            is_var = self.is_variable_name(name.word)
+            if not is_var or oper.word != op or eq.word != '=':
+                return ('', None, None)
+            variable = name.word
+            expr = Expression()
+            tokens = expr.ast(rest)
+            return (variable, expr, tokens)
+        return ('', None, None)
+
+    def parse_binop(self, tokens, op):
+        def is_binop(tokens):
+            closures = ClosureStack()
+            for index, token in enumerate(tokens):
+                gen = closures.iter(token)
+                print(gen)
+                if token.word == '\n':
+                    return None
+                if token.word == op and not gen:
+                    return index
+        if len(tokens) >= 3:
+            index = is_binop(tokens)
+            print(op, index)
+            if not index:
+                return (None, None, None)
+            left = Expression()
+            left.ast(tokens[:index])
+            if tokens[index].word != op:
+                return (None, None, None)
+            right = Expression()
+            tokens = right.ast(tokens[index + 1:])
+            return (left, right, tokens)
+        return (None, None, None)
     
     def clear_empty_lines(self, tokens):
         while len(tokens) and tokens[0].word == '\n':
@@ -71,6 +109,21 @@ class SyntaxModule:
         return new
 
 
+class Comment(SyntaxModule):
+    def __init__(self):
+        self.value = ''
+
+    def ast(self, tokens):
+        if len(tokens) >= 2:
+            if tokens[0].word != '#':
+                return None
+            self.value = tokens[1].word.strip()
+            tokens = tokens[2:]
+            if len(tokens) >= 3 and tokens[2].word == '\n':
+                tokens = tokens[1:]
+            return tokens
+
+
 class Block(SyntaxModule):
     def __init__(self):
         self.statements = []
@@ -98,7 +151,12 @@ class Block(SyntaxModule):
 
 class Statement(SyntaxModule):
     def __init__(self):
-        self.modules = [Variable, If, Loop, Expression]
+        self.modules = [
+            Variable, If, Loop,
+            Assignment, ShorthandSum, ShorthandSub,
+            ShorthandMul, ShorthandDiv, ShorthandMod,
+            Expression
+        ]
     
     def ignore(self):
         return ['modules']
@@ -115,7 +173,12 @@ class Statement(SyntaxModule):
 
 class Expression(SyntaxModule):
     def __init__(self):
-        self.modules = [Number, String, Boolean, Array, VariableReference]
+        self.modules = [
+            Parenthesis,
+            Sum, Sub, Mul, Div, Mod,
+            Number, String, Boolean,
+            Array, VariableReference, Comment
+        ]
     
     def ignore(self):
         return ['modules']
@@ -128,6 +191,140 @@ class Expression(SyntaxModule):
                 self.expr = mod
                 return res
         error_tok(tokens[0], ErrorTypes.UNDEF.value)
+
+
+class Parenthesis(SyntaxModule):
+    def __init__(self):
+        self.expr = None
+    
+    def ast(self, tokens):
+        if len(tokens) > 2:
+            if tokens[0].word != '(':
+                return None
+            self.expr = Expression()
+            tokens = self.expr.ast(tokens[1:])
+            return tokens[1:]
+
+
+class Assignment(SyntaxModule):
+    def __init__(self):
+        self.variable = None
+        self.expr = None
+    
+    def ast(self, tokens):
+        if len(tokens) >= 3:
+            [name, eq, *rest] = tokens
+            is_var = self.is_variable_name(name.word)
+            if not is_var or eq.word != '=':
+                return None
+            self.variable = name.word
+            self.expr = Expression()
+            return self.expr.ast(rest)
+
+
+class ShorthandSum(SyntaxModule):
+    def __init__(self):
+        self.variable = None
+        self.expr = None
+    
+    def ast(self, tokens):
+        res = self.parse_shorthand_assignment(tokens, '+')
+        (self.variable, self.expr, tokens) = res
+        return tokens
+
+
+class ShorthandSub(SyntaxModule):
+    def __init__(self):
+        self.variable = None
+        self.expr = None
+    
+    def ast(self, tokens):
+        res = self.parse_shorthand_assignment(tokens, '-')
+        (self.variable, self.expr, tokens) = res
+        return tokens
+
+
+class ShorthandMul(SyntaxModule):
+    def __init__(self):
+        self.variable = None
+        self.expr = None
+    
+    def ast(self, tokens):
+        res = self.parse_shorthand_assignment(tokens, '*')
+        (self.variable, self.expr, tokens) = res
+        return tokens
+
+
+class ShorthandDiv(SyntaxModule):
+    def __init__(self):
+        self.variable = None
+        self.expr = None
+    
+    def ast(self, tokens):
+        res = self.parse_shorthand_assignment(tokens, '/')
+        (self.variable, self.expr, tokens) = res
+        return tokens
+
+
+class ShorthandMod(SyntaxModule):
+    def __init__(self):
+        self.variable = None
+        self.expr = None
+    
+    def ast(self, tokens):
+        res = self.parse_shorthand_assignment(tokens, '%')
+        (self.variable, self.expr, tokens) = res
+        return tokens
+
+
+class Sum(SyntaxModule):
+    def __init__(self):
+        self.left = None
+        self.right = None
+    
+    def ast(self, tokens):
+        (self.left, self.right, tokens) = self.parse_binop(tokens, '+')
+        return tokens
+
+
+class Sub(SyntaxModule):
+    def __init__(self):
+        self.left = None
+        self.right = None
+    
+    def ast(self, tokens):
+        (self.left, self.right, tokens) = self.parse_binop(tokens, '-')
+        return tokens
+
+
+class Mul(SyntaxModule):
+    def __init__(self):
+        self.left = None
+        self.right = None
+    
+    def ast(self, tokens):
+        (self.left, self.right, tokens) = self.parse_binop(tokens, '*')
+        return tokens
+
+
+class Div(SyntaxModule):
+    def __init__(self):
+        self.left = None
+        self.right = None
+    
+    def ast(self, tokens):
+        (self.left, self.right, tokens) = self.parse_binop(tokens, '/')
+        return tokens
+
+
+class Mod(SyntaxModule):
+    def __init__(self):
+        self.left = None
+        self.right = None
+    
+    def ast(self, tokens):
+        (self.left, self.right, tokens) = self.parse_binop(tokens, '%')
+        return tokens
 
 
 class Number(SyntaxModule):
@@ -195,6 +392,20 @@ class VariableReference(SyntaxModule):
             return tokens[1:]
 
 
+# class ShellCommand(SyntaxModule):
+#     def __init__(self):
+#         self.silent = False
+#         self.code = False
+#         self.command = ''
+    
+#     def ast(self, tokens):
+#         if len(tokens):
+#             if not self.is_variable_name(tokens[0].word):
+#                 return None
+#             self.name = tokens[0].word
+#             return tokens[1:]
+
+
 class String(SyntaxModule):
     def __init__(self):
         self.stringlets = []
@@ -240,7 +451,7 @@ class Loop(SyntaxModule):
     def __init__(self):
         self.while_loop = False
         self.condition = None
-        self.iterator = None
+        self.iterator = ''
         self.iterable = None
         self.block = None
     
@@ -259,8 +470,7 @@ class Loop(SyntaxModule):
             # For loop
             is_var = self.is_variable_name(tokens[0].word)
             if is_var and tokens[1].word == 'in':
-                self.iterator = Variable()
-                self.iterator.name = tokens[0].word
+                self.iterator = tokens[0].word
                 tokens = tokens[1:]
                 self.iterable = Expression()
                 tokens = self.iterable.ast(tokens[1:])

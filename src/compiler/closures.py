@@ -6,7 +6,9 @@ class Closure:
 class ClosureStack:
     closures = [
         Closure('(', ')'),
-        Closure('[', ']')
+        Closure('[', ']'),
+        Closure('\'', '\''),
+        Closure('$', '$')
     ]
 
     def __init__(self):

@@ -11,6 +11,10 @@ class Parser:
     def parser(self):
         self.exp = Block()
         self.exp.ast(self.lexem)
+    
+    def translate(self):
+        translation = self.exp.translate()
+        print(translation)
 
     def get(self):
         return self.exp

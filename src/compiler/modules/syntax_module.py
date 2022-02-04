@@ -1,4 +1,14 @@
+from ..mem import Memory
+from ..systems.compute import Compute
+
+# TODO:
+# Ternary operator in bash
+# $([ "$b" == 5 ] && echo "$c" || echo "$d")
+
 class SyntaxModule:
+    memory = Memory()
+    compute = Compute()
+
     def __init__(self):
         pass
     
@@ -10,6 +20,18 @@ class SyntaxModule:
     
     def translate(self):
         raise 'Undefined Syntax (AST Translation)'
+    
+    def type_eval(self):
+        return None
+
+    def stringify(self):
+        return self.translate()
+    
+    def numberify(self):
+        return self.translate()
+    
+    def arraify(self):
+        return self.translate()
 
     def is_variable_name(self, name):
         is_alpha = lambda l: l.isalpha() or l in ['_']
@@ -32,9 +54,11 @@ class SyntaxModule:
             # Singleline block
             elif tokens[0].word == ':':
                 tokens = self.clear_empty_lines(tokens[1:])
+                SyntaxModule.memory.enter_scope()
                 st = Statement()
                 res = st.ast(tokens)
                 block.statements.append(st)
+                SyntaxModule.memory.leave_scope()
                 return (block, res)
         return (None, None)
 
@@ -44,9 +68,11 @@ class SyntaxModule:
             is_var = self.is_variable_name(name.word)
             if not is_var or oper.word != op or eq.word != '=':
                 return ('', None, None)
-            variable = name.word
+            variable = VariableReference(name.word)
             expr = Expression()
             tokens = expr.ast(rest)
+            if not SyntaxModule.memory.has_variable(name.word):
+                error_tok(name, f'Variable {name.word} does not exist in this scope')
             return (variable, expr, tokens)
         return ('', None, None)
 
@@ -111,29 +137,40 @@ class SyntaxModule:
 class Block(SyntaxModule):
     def __init__(self):
         self.statements = []
+    
+    def leave_block(self, tokens):
+        SyntaxModule.memory.leave_scope()
+        if len(SyntaxModule.memory.scopes) and not len(self.statements):
+            error_tok(tokens[0], 'Scope cannot be empty')
 
     def ast(self, tokens):
-        while len(tokens):
-            tokens = self.clear_empty_lines(tokens)
+        rest = tokens
+        SyntaxModule.memory.enter_scope()
+        while len(rest):
+            rest = self.clear_empty_lines(rest)
             # End of line feed
-            if not len(tokens):
+            if not len(rest):
+                self.leave_block(tokens)
                 return []
             # End of current block
-            if tokens[0].word == '}':
-                return tokens[1:]
+            if rest[0].word == '}':
+                self.leave_block(tokens)
+                return rest[1:]
             st = Statement()
-            res = st.ast(tokens)
+            res = st.ast(rest)
             # Error predicates
             is_none = res == None
-            is_unchanged = len(res) == len(tokens)
+            is_unchanged = len(res) == len(rest)
             # Detect any error
             if is_none or is_unchanged:
-                error_tok(tokens[0], ErrorTypes.UNDEF.value)
+                error_tok(rest[0], ErrorTypes.UNDEF.value)
             self.statements.append(st)
-            tokens = res
+            rest = res
+            if len(rest) and not (rest[0].word in ['\n', '}']):
+                error_tok(rest[0], 'New line expected')
     
     def translate(self):
-        return ''.join([st.translate() for st in self.statements])
+        return '\n'.join([st.translate() for st in self.statements])
 
 
 class Statement(SyntaxModule):
@@ -143,7 +180,7 @@ class Statement(SyntaxModule):
             Variable, If, Loop,
             Assignment, ShorthandSum, ShorthandSub,
             ShorthandMul, ShorthandDiv, ShorthandMod,
-            SilentShell, Expression
+            StatementShell, Expression
         ]
     
     def ignore(self):
@@ -166,11 +203,10 @@ class Expression(SyntaxModule):
     def __init__(self):
         self.expr = None
         self.modules = [
-            Parenthesis,
             Sum, Sub, Mul, Div, Mod, Not,
             Or, And, Eq, Neq, Gt, Gte, Lt, Lte,
-            Number, String, Boolean, ShellCommand,
-            Array, VariableReference, Comment
+            Parenthesis, Number, Text, Boolean,
+            ShellCommand, ShellStatus, Array, VariableReference
         ]
     
     def ignore(self):
@@ -185,8 +221,20 @@ class Expression(SyntaxModule):
                 return res
         error_tok(tokens[0], ErrorTypes.UNDEF.value)
 
+    def type_eval(self):
+        return self.expr.type_eval()
+
     def translate(self):
         return self.expr.translate()
+    
+    def numberify(self):
+        return self.expr.numberify()
+    
+    def stringify(self):
+        return self.expr.stringify()
+    
+    def arraify(self):
+        return self.expr.arraify()
 
 # Imports at the bottom prevents
 # recursive importing
@@ -195,7 +243,6 @@ from error import error_tok, ErrorTypes
 from ..closures import ClosureStack
 from .assignment import *
 from .binops import *
-from .comment import *
 from .data_types import *
 from .if_stmt import *
 from .loop import *

@@ -1,7 +1,6 @@
 from .lexer import Lexer
 from .modules import *
 
-
 class Parser:
     def __init__(self, lexem):
         self.lexem = lexem
@@ -14,7 +13,7 @@ class Parser:
     
     def translate(self):
         translation = self.exp.translate()
-        print(translation)
+        return translation
 
     def get(self):
         return self.exp

@@ -11,6 +11,9 @@ class Rule:
     
     def __str__(self):
         return f'Rule[{self.name} -> {self.start} {self.end}]'
+    
+    def __repr__(self):
+        return self.__str__()
 
 class RuleCodeChunk:
     def __init__(self, code, file_iter):
@@ -26,10 +29,10 @@ class Rules:
         self.chunk = RuleCodeChunk(code, file_iter)
         self.rules = [
             Rule('global', None, region=False),
-            Rule('string_single', '\'', interp='string_interp'),
-            Rule('string_interp', '{', '}', region=False),
+            Rule('text_single', '\'', interp='interp'),
+            Rule('interp', '{', '}', region=False),
             Rule('comment', '#', '\n'),
-            Rule('command', '$', '$', interp='string_interp'),
+            Rule('command', '$', '$', interp='interp'),
         ]
         self.stack = [self.rules[0]]
         self.begin_rules = list(map(lambda r: r.start, self.rules))
@@ -62,6 +65,9 @@ class Rules:
 
     def is_region(self):
         return self.stack[-1].region
+
+    def get_region(self):
+        return self.stack[-1]
     
     def handle_rule(self):
         reg = self.stack[-1]
@@ -82,7 +88,7 @@ class Rules:
             # Check if it's an interpolation and if it can be closed
             if not reg.region and reg.end:
                 rule = self.get_rule_by_end(self.chunk.get())
-                if rule:
+                if rule and rule == reg:
                     self.stack.pop()
                     return True
             rule = self.get_rule_by_start(self.chunk.get())

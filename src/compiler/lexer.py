@@ -11,7 +11,7 @@ class Lexer:
             '(', ')', '[', ']',
             '*', '+', '=', '-',
             '%', ':', ',', '#',
-            '$'
+            '$', '\''
         ]
         self.closures = ClosureStack()
         self.code = code
@@ -32,9 +32,10 @@ class Lexer:
         for letter in self.code:
             new_rule = self.rules.handle_rule()
             if not new_rule and self.rules.is_region():
-                self.word += letter
+                if self.rules.get_region().name != 'comment':
+                    self.word += letter
             else:
-                if letter in [' ', '\t']:
+                if letter in [' ', '\t', '#']:
                     self.add_word()
                 elif letter in self.symbols:
                     self.add_word()
@@ -70,7 +71,6 @@ class Lexer:
         return self.lexem
 
 if __name__ == '__main__':
-    # TODO: Tests
     def test_positioner(code, lexem):
         lines = code.split('\n')
         for token in lexem:

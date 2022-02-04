@@ -1,3 +1,6 @@
+from compiler.modules.parenthesis import Parenthesis
+from compiler.modules.variables import Variable
+from compiler.type import Type
 from .syntax_module import SyntaxModule, Expression
 from .data_types import Boolean
 
@@ -29,7 +32,10 @@ class Loop(SyntaxModule):
                 tokens = tokens[1:]
                 self.iterable = Expression()
                 tokens = self.iterable.ast(tokens[1:])
+                SyntaxModule.memory.enter_scope()
+                SyntaxModule.memory.add_variable(self.iterator, Type.Text)
                 (self.block, tokens) = self.parse_block(tokens)
+                SyntaxModule.memory.leave_scope()
                 return tokens
             # While loop
             self.while_loop = True
@@ -37,3 +43,20 @@ class Loop(SyntaxModule):
             tokens = self.condition.ast(tokens)
             (self.block, tokens) = self.parse_block(tokens)
             return tokens
+    
+    def translate(self):
+        # While true loop
+        header = ''
+        # For loop
+        if not self.while_loop:
+            header = f'for {self.iterator} in {self.iterable.arraify()}\ndo'
+        # While loop
+        if self.while_loop:
+            cond = self.condition.numberify()
+            cond = Parenthesis.remove_outer_parenthesis(cond)
+            header = f'while [ {cond} != 0 ]; do'
+        # Body
+        block = self.block.translate()
+        return '\n'.join([
+            header, block, 'done'
+        ])

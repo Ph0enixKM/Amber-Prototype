@@ -1,2 +1,1 @@
-from .parser import Parser
-from .lexer import Lexer
+from .compiler import Compiler

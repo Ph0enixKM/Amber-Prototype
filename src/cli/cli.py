@@ -45,7 +45,8 @@ class CLI:
         if self.args.output:
             filename = self.args.output
             with open(filename, 'w') as file:
-                return file.write(ast)
+                file.write(ast)
+                return None
         print(ast)
     
     def get_stdout(self):

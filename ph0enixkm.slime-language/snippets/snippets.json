@@ -1,0 +1,52 @@
+{
+    "Loop In": {
+        "prefix": "loopin",
+        "scope": "slime, soruce.slime",
+        "body": [
+          "loop ${1:iter} in ${2:iterable} {",
+          "\t$0",
+          "}"
+        ],
+        "description": "For Loop"
+    },
+    "Loop While": {
+        "prefix": "loopwhile",
+        "scope": "slime, soruce.slime",
+        "body": [
+          "loop ${1:condition} {",
+          "\t$0",
+          "}"
+        ],
+        "description": "For Loop"
+    },
+    "Loop": {
+        "prefix": "loop",
+        "scope": "slime, soruce.slime",
+        "body": [
+          "loop {",
+          "\t$0",
+          "}"
+        ],
+        "description": "For Loop"
+    },
+    "If": {
+        "prefix": "if",
+        "scope": "slime, soruce.slime",
+        "body": [
+          "if ${1:condition} {",
+          "\t$0",
+          "}"
+        ],
+        "description": "If Statement"
+    },
+    "Function": {
+        "prefix": "fun",
+        "scope": "slime, soruce.slime",
+        "body": [
+          "fun ${2:name}(${3:params}) {",
+          "\t$0",
+          "}"
+        ],
+        "description": "Function"
+    }
+}

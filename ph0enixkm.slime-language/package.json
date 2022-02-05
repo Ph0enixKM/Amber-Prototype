@@ -1,0 +1,49 @@
+{
+	"name": "slime-language",
+	"displayName": "Slime Language",
+	"description": "Slime language support",
+	"version": "1.0.0",
+	"publisher": "Ph0enixKM",
+	"engines": {
+		"vscode": "^1.28.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://Ph0enixKM@bitbucket.org/Ph0enixKM/vsc-magma-language.git"
+	},
+	"author": "Phoenix Arts (Paweł Karaś)",
+	"categories": [
+		"Programming Languages"
+	],
+	"icon": "images/icon.png",
+	"contributes": {
+		"languages": [
+			{
+				"id": "slime",
+				"aliases": [
+					"Slime",
+					"slime"
+				],
+				"extensions": [
+					".sl",
+					".slime",
+					".slm"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "slime",
+				"scopeName": "source.slime",
+				"path": "./syntaxes/slime.tmLanguage.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "slime",
+				"path": "./snippets/snippets.json"
+			}
+		]
+	}
+}

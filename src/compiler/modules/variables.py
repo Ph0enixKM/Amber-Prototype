@@ -7,6 +7,7 @@ class Variable(SyntaxModule):
     def __init__(self):
         self.name = ''
         self.expr = None
+        self.func = False
 
     def ast(self, tokens):
         if len(tokens) > 3:
@@ -16,7 +17,9 @@ class Variable(SyntaxModule):
             if not self.is_variable_name(name.word):
                 error_tok(name, ErrorTypes.VAR.value)
             if SyntaxModule.memory.has_double_variable(name.word):
-                error_tok(name, f'Variable {name.word} already exists in this scope')
+                error_tok(name, f'Variable "{name.word}" already exists in this scope')
+            if SyntaxModule.memory.is_fun_context():
+                self.func = True
             self.name = name.word
             self.expr = Expression()
             tokens = self.expr.ast(exp)
@@ -24,7 +27,8 @@ class Variable(SyntaxModule):
             return tokens
     
     def translate(self):
-        return f'{self.name}={self.expr.translate()}'
+        local = 'local ' if self.func else ''
+        return f'{local}{self.name}={self.expr.translate()}'
 
 
 class VariableReference(SyntaxModule):
@@ -41,7 +45,7 @@ class VariableReference(SyntaxModule):
             if not self.is_variable_name(name.word):
                 return None
             if not SyntaxModule.memory.has_variable(name.word):
-                error_tok(name, f'Variable {name.word} does not exist in this scope')
+                error_tok(name, f'Variable "{name.word}" does not exist')
             self.var_type = SyntaxModule.memory.get_variable_type(name.word)
             self.name = name.word
             return tokens[1:]
@@ -53,9 +57,7 @@ class VariableReference(SyntaxModule):
         return f'${self.name}'
     
     def numberify(self):
-        if self.var_type == Type.Text:
-            return f'${{#{self.name}}}'
-        elif self.var_type == Type.Array:
+        if self.var_type == Type.Array:
             return f'${{#{self.name}[@]}}'
         return self.translate()
     

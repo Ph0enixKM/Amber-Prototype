@@ -85,7 +85,7 @@ class ShellStatus(SyntaxModule):
         pass
     
     def ast(self, tokens):
-        if len(tokens) >= 1:
+        if len(tokens):
             if tokens[0].word != 'status':
                 return None
             return tokens[1:]

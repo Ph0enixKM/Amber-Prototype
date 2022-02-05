@@ -42,9 +42,9 @@ class SyntaxModule:
                 return False
         return True
     
-    def parse_block(self, tokens):
+    def parse_block(self, tokens, loop_scope=False):
         if len(tokens) >= 2:
-            block = Block()
+            block = Block(loop_scope)
             # Multiline block
             if tokens[0].word == '{':
                 if tokens[1].word != '\n':
@@ -54,7 +54,7 @@ class SyntaxModule:
             # Singleline block
             elif tokens[0].word == ':':
                 tokens = self.clear_empty_lines(tokens[1:])
-                SyntaxModule.memory.enter_scope()
+                SyntaxModule.memory.enter_scope(loop_scope=loop_scope)
                 st = Statement()
                 res = st.ast(tokens)
                 block.statements.append(st)
@@ -135,8 +135,9 @@ class SyntaxModule:
 
 
 class Block(SyntaxModule):
-    def __init__(self):
+    def __init__(self, loop_scope=False):
         self.statements = []
+        self.loop_scope = loop_scope
     
     def leave_block(self, tokens):
         SyntaxModule.memory.leave_scope()
@@ -145,7 +146,7 @@ class Block(SyntaxModule):
 
     def ast(self, tokens):
         rest = tokens
-        SyntaxModule.memory.enter_scope()
+        SyntaxModule.memory.enter_scope(self.loop_scope)
         while len(rest):
             rest = self.clear_empty_lines(rest)
             # End of line feed
@@ -180,7 +181,8 @@ class Statement(SyntaxModule):
             Variable, If, Loop,
             Assignment, ShorthandSum, ShorthandSub,
             ShorthandMul, ShorthandDiv, ShorthandMod,
-            StatementShell, Expression
+            StatementShell, Continue, Break,
+            Function, Expression
         ]
     
     def ignore(self):
@@ -204,8 +206,8 @@ class Expression(SyntaxModule):
         self.expr = None
         self.modules = [
             Sum, Sub, Mul, Div, Mod, Not,
-            Or, And, Eq, Neq, Gt, Gte, Lt, Lte,
-            Parenthesis, Number, Text, Boolean,
+            Or, And, Eq, Neq, Gt, Gte, Lt, Lte, Return,
+            Parenthesis, FunctionCall, Number, Text, Boolean,
             ShellCommand, ShellStatus, Array, VariableReference
         ]
     
@@ -249,3 +251,4 @@ from .loop import *
 from .parenthesis import *
 from .shell_command import *
 from .variables import *
+from .function import *

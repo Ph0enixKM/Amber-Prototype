@@ -50,7 +50,7 @@ class Rules:
     def get_rule_by_tok_str(self, chunk, tok_str):
         is_valid = lambda r: tok_str(r) != None
         is_equal = lambda r: tok_str(r) == chunk[-len(tok_str(r)):]
-        is_escaped = lambda r: chunk[-len(tok_str(r)) - 1] == '\\'
+        is_escaped = lambda r: len(chunk) > len(tok_str(r)) and chunk[-len(tok_str(r)) - 1] == '\\'
         return self.get_rule_by_func(
             lambda r: is_valid(r) and is_equal(r) and not is_escaped(r))
 

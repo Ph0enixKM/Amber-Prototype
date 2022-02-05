@@ -4,8 +4,8 @@ from os import system
 import json
 
 class CLI:
-    lang = 'jacuzzi'
-    name = 'Jacuzzi Compiler'
+    lang = 'slime'
+    name = 'Slime Compiler'
     version = '1.0.0'
 
     def __init__(self):

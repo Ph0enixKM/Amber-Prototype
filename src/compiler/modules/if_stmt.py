@@ -15,11 +15,11 @@ class If(SyntaxModule):
             self.condition = Expression()
             rest = self.condition.ast(rest)
             (self.block_true, rest) = self.parse_block(rest)
-            rest = self.clear_empty_lines(rest)
+            new_rest = self.clear_empty_lines(rest)
             # Handle else
-            if len(rest) and rest[0].word == 'else':
-                (self.block_false, rest) = self.parse_block(rest[1:])
-                return rest
+            if len(new_rest) and new_rest[0].word == 'else':
+                (self.block_false, new_rest) = self.parse_block(new_rest[1:])
+                return new_rest
             return rest
     
     def translate(self):

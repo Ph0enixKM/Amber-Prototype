@@ -1,4 +1,3 @@
-
 # Variable definition
 box myVar = 20
 # Arithmetics (with float support)

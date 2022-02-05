@@ -5,8 +5,8 @@
 # AmberScript syntax support extension 
 AmberScript is a programmer-friendly language that compiles to BashScript.
 
-## Example usage ⚙️
+## Example usage
 
 <div align="center">
-    <img src="images/lang.png" style="border-radius: 20px; margin-top: 10px" width="400">
+    <img src="images/amber-script.png" style="border-radius: 20px; margin-top: 10px" width="600">
 </div>

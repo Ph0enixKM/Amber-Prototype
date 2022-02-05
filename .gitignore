@@ -1,2 +1,3 @@
 __pycache__/
 vsc-syntax/*.vsix
+**/.DS_Store

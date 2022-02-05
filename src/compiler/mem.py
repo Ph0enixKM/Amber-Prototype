@@ -45,6 +45,12 @@ class Memory:
             if name in scope.vars:
                 return True
         return False
+    
+    def update_variable(self, name, new_type):
+        for scope in self.scopes:
+            if name in scope.vars:
+                scope.vars[name].eval_type = new_type
+        return None
 
     def has_double_variable(self, name):
         return name in self.scopes[-1].vars

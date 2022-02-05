@@ -6,10 +6,6 @@ from ..type import Type
 class Number(SyntaxModule):
     def __init__(self):
         self.value = 0
-        self.tok = None
-    
-    def ignore(self):
-        return ['tok']
 
     def positive(self, tokens):
         if len(tokens) >= 1:
@@ -29,7 +25,6 @@ class Number(SyntaxModule):
             return rest
 
     def ast(self, tokens):
-        self.tok = tokens[0]
         return self.negative(tokens) or self.positive(tokens)
     
     def type_eval(self):
@@ -40,21 +35,11 @@ class Number(SyntaxModule):
 
     def translate(self):
         return str(self.value)
-    
-    def numberify(self):
-        return self.translate()
-    
-    def arraify(self):
-        error_tok(self.tok, 'Unable to convert Number to Array')
 
 
 class Boolean(SyntaxModule):
     def __init__(self):
         self.value = False
-        self.tok = None
-    
-    def ignore(self):
-        return ['tok']
     
     def ast(self, tokens):
         if len(tokens):
@@ -68,9 +53,6 @@ class Boolean(SyntaxModule):
 
     def translate(self):
         return '1' if self.value else '0'
-    
-    def arraify(self):
-        error_tok(self.tok, 'Unable to convert Boolean to Array')
 
 
 class Text(SyntaxModule):
@@ -88,7 +70,6 @@ class Text(SyntaxModule):
             if tokens[0].word != '\'':
                 return None
             tokens = tokens[1:]
-            print(tokens)
             while tokens[0].word != '\'':
                 if tokens[0].word == '{':
                     expr = Expression()
@@ -123,9 +104,6 @@ class Text(SyntaxModule):
     
     def numberify(self):
         return str(len(self.translate()))
-    
-    def arraify(self):
-        error_tok(self.tok, 'Unable to convert Text to Array')
 
 
 class Array(SyntaxModule):

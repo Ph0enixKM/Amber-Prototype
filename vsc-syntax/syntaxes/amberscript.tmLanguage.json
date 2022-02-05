@@ -1,6 +1,6 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Slime",
+	"name": "amberscript",
 	"patterns": [
 		{
 			"include": "#keywords"
@@ -26,7 +26,7 @@
 				
 				"captures": {
 					"1" : {
-						"name" : "keyword.control.slime"
+						"name" : "keyword.control.amberscript"
 					},
 					"2" : {
 						"name" : "variable.name"
@@ -46,20 +46,20 @@
 				}
 			},	
 			{
-				"name": "keyword.control.slime",
-				"match": "\\b(if|loop|in|silent|return|fun|else|break|continue|and|or|not|box)\\b"
+				"name": "keyword.control.amberscript",
+				"match": "\\b(status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|box)\\b"
 			},
 			{
 				"match": "\\b(true|false)\\b(?![?!])",
-				"name": "constant.language.boolean.slime"
+				"name": "constant.language.boolean.amberscript"
 			},
 			{
 				"match": "^\\s*\\d+\\s*$",
-				"name": "constant.language.int.slime"
+				"name": "constant.language.int.amberscript"
 			},
 			{
 				"match": "[+-]?([0-9]*[.])?[0-9]+",
-				"name": "constant.language.float.slime"
+				"name": "constant.language.float.amberscript"
 			},
 			{
 				"match": "\\b\\w+\\s*(?=\\([\\S\\s]*?\\)?)",
@@ -70,7 +70,7 @@
 				"name": "entity.name.class.capital"
 			},
 			{
-				"name" : "support.function.git-rebase.slime.symbol",
+				"name" : "support.function.git-rebase.amberscript.symbol",
 				"match" : "(\\+|\\-|\\^|\\*|\\=|\\||\\%)"
 			},
 			{
@@ -86,7 +86,7 @@
 		"string-insides" : {
 			"patterns": [
 				{
-					"name": "constant.character.escape.slime",
+					"name": "constant.character.escape.amberscript",
 					"match": "\\\\."
 				},
 				{
@@ -104,7 +104,7 @@
 		"command-insides" : {
 			"patterns": [
 				{
-					"name": "constant.character.escape.slime",
+					"name": "constant.character.escape.amberscript",
 					"match": "\\\\."
 				},
 				{
@@ -128,7 +128,7 @@
 			]
 		},
 		"strings": {
-			"name": "string.quoted.single.slime",
+			"name": "string.quoted.single.amberscript",
 			"begin": "'",
 			"end": "'",
 			"patterns": [
@@ -138,7 +138,7 @@
 			]
 		},
 		"commands": {
-			"name": "string.command.slime",
+			"name": "string.command.amberscript",
 			"begin": "\\$",
 			"end": "\\$",
 			"patterns": [
@@ -174,5 +174,5 @@
 			]
 		}
 	},
-	"scopeName": "source.slime"
+	"scopeName": "source.amberscript"
 }

@@ -1,8 +1,8 @@
 {
-	"name": "slime-language",
-	"displayName": "Slime Language",
-	"description": "Slime language support",
-	"version": "1.0.0",
+	"name": "amberscript-language",
+	"displayName": "AmberScript Language",
+	"description": "AmberScript language support",
+	"version": "1.0.1",
 	"publisher": "Ph0enixKM",
 	"engines": {
 		"vscode": "^1.28.0"
@@ -19,29 +19,29 @@
 	"contributes": {
 		"languages": [
 			{
-				"id": "slime",
+				"id": "amberscript",
 				"aliases": [
-					"Slime",
-					"slime"
+					"AmberScript",
+					"amberscript"
 				],
 				"extensions": [
-					".sl",
-					".slime",
-					".slm"
+					".as",
+					".ams",
+					".amber"
 				],
 				"configuration": "./language-configuration.json"
 			}
 		],
 		"grammars": [
 			{
-				"language": "slime",
-				"scopeName": "source.slime",
-				"path": "./syntaxes/slime.tmLanguage.json"
+				"language": "amberscript",
+				"scopeName": "source.amberscript",
+				"path": "./syntaxes/amberscript.tmLanguage.json"
 			}
 		],
 		"snippets": [
 			{
-				"language": "slime",
+				"language": "amberscript",
 				"path": "./snippets/snippets.json"
 			}
 		]

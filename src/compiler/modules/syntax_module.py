@@ -73,6 +73,8 @@ class SyntaxModule:
             tokens = expr.ast(rest)
             if not SyntaxModule.memory.has_variable(name.word):
                 error_tok(name, f'Variable {name.word} does not exist in this scope')
+            new_type = expr.type_eval()
+            SyntaxModule.memory.update_variable(name.word, new_type)
             return (variable, expr, tokens)
         return ('', None, None)
 

@@ -20,7 +20,10 @@ class Assignment(SyntaxModule):
                 error_tok(name, f'Variable {name.word} does not exists in this scope')
             self.variable = name.word
             self.expr = Expression()
-            return self.expr.ast(rest)
+            rest = self.expr.ast(rest)
+            new_type = self.expr.type_eval()
+            SyntaxModule.memory.update_variable(name.word, new_type)
+            return rest
     
     def translate(self):
         return f'{self.variable}={self.expr.translate()}'

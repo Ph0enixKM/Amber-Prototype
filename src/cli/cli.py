@@ -4,8 +4,8 @@ from os import system
 import json
 
 class CLI:
-    lang = 'slime'
-    name = 'Slime Compiler'
+    lang = 'amberscript'
+    name = 'AmberScript Compiler'
     version = '1.0.0'
 
     def __init__(self):
@@ -43,6 +43,7 @@ class CLI:
     def get_ast(self):
         ast = json.dumps(self.compiler.ast(), indent=4)
         if self.args.output:
+            filename = self.args.output
             with open(filename, 'w') as file:
                 return file.write(ast)
         print(ast)

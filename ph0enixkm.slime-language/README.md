@@ -1,1 +1,0 @@
-# Slime syntax support extension

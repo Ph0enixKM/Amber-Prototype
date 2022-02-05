@@ -47,7 +47,7 @@
 			},	
 			{
 				"name": "keyword.control.amberscript",
-				"match": "\\b(status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|box)\\b"
+				"match": "\\b(error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|box)\\b"
 			},
 			{
 				"match": "\\b(true|false)\\b(?![?!])",

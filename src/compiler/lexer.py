@@ -21,6 +21,7 @@ class Lexer:
         self.word = ''
         region_error = self.lexer()
         closure_error = self.asi()
+        # TODO: Handle errors
 
     def add_word(self, same_line = False):
         if len(self.word):

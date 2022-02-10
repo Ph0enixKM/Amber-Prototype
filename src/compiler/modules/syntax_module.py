@@ -1,9 +1,6 @@
 from ..mem import Memory
 from ..systems.compute import Compute
 
-# TODO:
-# Ternary operator in bash
-# $([ "$b" == 5 ] && echo "$c" || echo "$d")
 
 class SyntaxModule:
     memory = Memory()

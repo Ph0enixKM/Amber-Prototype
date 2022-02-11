@@ -25,12 +25,8 @@ Or you can download it here in [the Visual Studio Marketplace website](https://m
 
 
 ## Hello World Example
-One of the first things that programmers do when learning a new programming language is infamous "hello world" program.
-
-> **Warning!**
-> Since AmberScript does not have implemented any standard library yet - we will handle all the IO by embedding BashScript code.
-> In the future you will be able to just call `print('Hello world!')`
+One of the first things that programmers do when learning a new programming language is infamous "hello world" program. Here we are using *shell function call* which is not checked by compiler at compiletime if such command exists. But we assume our shell does support `echo` command.
 
 ```amberscript
-$ echo Hello World! $
+sh echo('Hello World!')
 ```

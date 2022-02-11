@@ -1,0 +1,27 @@
+.copy-code {
+    width: 30px;
+    height: 30px;
+    background-color: #f8f8f8;
+    position: absolute;
+    border-radius: 5px;
+    border: 2px #f8f8f8 solid;
+    top: 25px;
+    right: 10px;
+    opacity: 0;
+    transition: 200ms;
+    padding: 3px;
+    cursor: pointer
+}
+
+.copy-code:hover {
+    border: 2px #ebebeb solid;
+}
+
+.copy-code:active {
+    background-color: #eaeaea;
+    border: 2px #ebebeb solid;
+}
+
+code:hover .copy-code {
+    opacity: 1;
+}

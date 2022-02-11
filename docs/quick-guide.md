@@ -34,6 +34,16 @@ let code = status
 let mywebsite = silent $ curl http://example.com $
 ```
 
+As you might remember from getting started guide - we used a *shell function call*.
+This is alpha equivalent to just invoking command with no parameters.
+
+```amberscript
+$ echo hello $ == sh echo('hello')
+```
+
+Shell function call is just a syntax sugar and should be used where possible if given command does not require
+complex arguments, pipes etc.
+
 ## If statement
 If statements are very simple. Just like in c-like languages, it is possible to create 
 blocks containing multiple statements and single-statement ones.
@@ -41,9 +51,9 @@ blocks containing multiple statements and single-statement ones.
 ```amberscript
 # Multiline blocks
 if age >= 18 {
-    $ echo Welcome $
+    sh echo('Welcome')
 } else {
-    $ echo Nope $
+    sh echo('Nope')
 }
 
 # Singleline blocks
@@ -68,15 +78,15 @@ There are 3 types of loops in AmberScript. The simplest one is an infinite loop,
 
 ```amberscript
 loop {
-    $ echo Over and over... $
+    sh echo('Over and over...')
 }
 
 loop age < 100 {
-    $ echo Living in progress...$
+    sh echo(Living in progress...')
 }
 
 loop fruit in fruits {
-    $ echo Buy {fruit}! $
+    sh echo('Buy {fruit}!')
 }
 ```
 
@@ -87,12 +97,9 @@ Creating and calling functions. Functions can take any amount of parameters. The
 fun fooBaz(n) {
     let index = 1
     loop index <= n {
-        if index % 3 == 0
-            $ echo "Foo!" $
-        if index % 5 == 0
-            $ echo "Baz!" $
-        if index % 15 == 0
-            $ echo "Foo Baz!" $
+        if index % 3 == 0 sh echo('Foo!')
+        if index % 5 == 0 sh echo('Baz!')
+        if index % 15 == 0 sh echo('Foo Baz!')
         index += 1
     }
 }

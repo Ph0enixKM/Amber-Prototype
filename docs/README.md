@@ -14,7 +14,7 @@ fun fibonacci(num) {
     let i = 0
 
     loop i < num {
-        $ echo {next} $
+        sh echo(next)
         before = actual + next
         actual = next
 		next = before

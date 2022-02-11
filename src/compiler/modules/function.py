@@ -52,15 +52,19 @@ class Function(SyntaxModule):
 class FunctionCall(SyntaxModule):
     def __init__(self):
         self.name = ''
+        self.shell = False
         self.params = []
 
     def ast(self, tokens):
         if len(tokens) >= 3:
+            if tokens[0].word == 'sh':
+                self.shell = True
+                tokens = tokens[1:]
             [fun, *rest] = tokens
             is_var = self.is_variable_name(fun)
             if not is_var or rest[0].word != '(':
                 return None
-            if not SyntaxModule.memory.has_fun(fun.word):
+            if not SyntaxModule.memory.has_fun(fun.word) and not self.shell:
                 error_tok(rest[0], f'Function "{fun.word}" does not exist')
             self.name = fun.word
             rest = rest[1:]

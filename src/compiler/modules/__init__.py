@@ -1,1 +1,1 @@
-from .syntax_module import Block
+from .syntax_module import Block, SyntaxModule

@@ -68,7 +68,8 @@ class ShellCommand(SyntaxModule):
                 interps = interps[1:]
             else:
                 command = (commandlets[0]
-                    .replace('\\$', '$'))
+                    .replace('\\$', '$')
+                    .replace('\\{', '{'))
                 res.append(command)
                 commandlets = commandlets[1:]
         if raw:

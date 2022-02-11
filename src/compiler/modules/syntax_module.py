@@ -229,7 +229,7 @@ class Statement(SyntaxModule):
             Assignment, ShorthandSum, ShorthandSub,
             ShorthandMul, ShorthandDiv, ShorthandMod,
             StatementShell, Continue, Break,
-            Function, Expression
+            Function, FunctionCallStatement, Expression
         ]
     
     def ignore(self):

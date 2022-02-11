@@ -131,10 +131,6 @@ Prism.languages.insertBefore('amberscript', 'string', {
 				pattern: /\s-{1,2}\S+\b/,
 				alias: 'number'
 			},
-			'commandlet': {
-				pattern: /\b[\S]+\b/,
-				alias: 'url'
-			},
 			'string': /[\s\S]+/
 		},
 	},

@@ -20,10 +20,8 @@ class Memory:
         self.scopes.append(Scope(loop_scope, fun_scope))
     
     def leave_scope(self):
-        if len(self.scopes) > 0:
+        if len(self.scopes) > 1:
             self.scopes.pop()
-        else:
-            raise Exception('Cannot leave global scope context')
     
     def add_variable(self, name, eval_type):
         self.scopes[-1].vars[name] = VariableInfo(eval_type)

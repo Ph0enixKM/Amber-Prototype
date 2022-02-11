@@ -4,19 +4,17 @@ from .modules import *
 class Parser:
     def __init__(self, lexem):
         self.lexem = lexem
-        self.exp = None
-        self.parser()
+        self.expr = Block()
 
     def parser(self):
-        self.exp = Block()
-        self.exp.ast(self.lexem)
+        self.expr.ast(self.lexem)
     
     def translate(self):
-        translation = self.exp.translate()
+        translation = self.expr.translate()
         return translation
 
     def get(self):
-        return self.exp
+        return self.expr
 
 if __name__ == '__main__':
     code = 'let a = 12'

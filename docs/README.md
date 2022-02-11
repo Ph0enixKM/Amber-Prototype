@@ -8,10 +8,10 @@ Here is a sample AmberScript code so that you can see how it looks like in actio
 
 ```amberscript
 fun fibonacci(num) {
-	box before = 0
-	box actual = 1
-	box next = 1
-    box i = 0
+	let before = 0
+	let actual = 1
+	let next = 1
+    let i = 0
 
     loop i < num {
         $ echo {next} $

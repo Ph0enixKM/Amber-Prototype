@@ -114,7 +114,7 @@ class Mod(SyntaxModule):
     def translate(self):
         left = self.left.numberify()
         right = self.right.numberify()
-        return SyntaxModule.compute.binop(left, '%', right)
+        return SyntaxModule.compute.mod(left, right)
 
 
 class Eq(SyntaxModule):
@@ -130,6 +130,13 @@ class Eq(SyntaxModule):
         return Type.Boolean
     
     def translate(self):
+        if Type.Text in [self.left.type_eval(), self.right.type_eval()]:
+            left = self.left.translate()
+            right = self.right.translate()
+            # In bash 0 exit code is correct hence we invert.
+            # Underscores prevent from crashing when either
+            # of these strings is empty
+            return f'$([ _{left} != _{right} ]; echo $?)'
         left = self.left.numberify()
         right = self.right.numberify()
         return SyntaxModule.compute.binop(left, '==', right)
@@ -148,6 +155,13 @@ class Neq(SyntaxModule):
         return Type.Boolean
     
     def translate(self):
+        if Type.Text in [self.left.type_eval(), self.right.type_eval()]:
+            left = self.left.translate()
+            right = self.right.translate()
+            # In bash 0 exit code is correct
+            # Underscores prevent from crashing when either
+            # of these strings is empty
+            return f'$([ _{left} = _{right} ]; echo $?)'
         left = self.left.numberify()
         right = self.right.numberify()
         return SyntaxModule.compute.binop(left, '!=', right)

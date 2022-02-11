@@ -5,6 +5,7 @@ from ..systems.compute import Compute
 class SyntaxModule:
     memory = Memory()
     compute = Compute()
+    reserved_variable = '__'
 
     def __init__(self):
         pass
@@ -30,10 +31,15 @@ class SyntaxModule:
     def arraify(self):
         return self.translate()
 
-    def is_variable_name(self, name):
+    def is_variable_name(self, token, error=False):
+        reserved = SyntaxModule.reserved_variable
+        name = token.word
+        throw = lambda exc: error_tok(token, exc) if error else False
+        if name[:2] == reserved:
+            return throw(f'Variable name cannot start with "{reserved}"')
         is_alpha = lambda l: l.isalpha() or l in ['_']
         if not is_alpha(name[0]):
-            return False
+            return throw('Variable name cannot start with a digit')
         for letter in name[1:]:
             if not is_alpha(letter) and not letter.isdigit():
                 return False
@@ -49,31 +55,68 @@ class SyntaxModule:
                 res = block.ast(tokens[2:])
                 return (block, res)
             # Singleline block
-            elif tokens[0].word == ':':
-                tokens = self.clear_empty_lines(tokens[1:])
-                SyntaxModule.memory.enter_scope(loop_scope=loop_scope)
-                st = Statement()
-                res = st.ast(tokens)
-                block.statements.append(st)
-                SyntaxModule.memory.leave_scope()
-                return (block, res)
+            tokens = self.clear_empty_lines(tokens)
+            SyntaxModule.memory.enter_scope(loop_scope=loop_scope)
+            st = Statement()
+            res = st.ast(tokens)
+            block.statements.append(st)
+            SyntaxModule.memory.leave_scope()
+            return (block, res)
         return (None, None)
 
     def parse_shorthand_assignment(self, tokens, op):
-        if len(tokens) >= 3:
-            [name, oper, eq, *rest] = tokens
-            is_var = self.is_variable_name(name.word)
-            if not is_var or oper.word != op or eq.word != '=':
-                return ('', None, None)
-            variable = VariableReference(name.word)
-            expr = Expression()
-            tokens = expr.ast(rest)
-            if not SyntaxModule.memory.has_variable(name.word):
-                error_tok(name, f'Variable {name.word} does not exist in this scope')
-            new_type = expr.type_eval()
-            SyntaxModule.memory.update_variable(name.word, new_type)
-            return (variable, expr, tokens)
-        return ('', None, None)
+        def array_shorthand(tokens, op):
+            if len(tokens) >= 6:
+                variable = ArraySubscription()
+                rest = variable.ast(tokens)
+                if rest and op:
+                    if rest[0].word != op:
+                        return (None, None, None)
+                    rest = rest[1:]
+                if not rest or rest[0].word != '=':
+                    return (None, None, None)
+                expr = Expression()
+                rest = expr.ast(rest[1:])
+                new_type = expr.type_eval()
+                SyntaxModule.memory.update_variable(variable.name, new_type)
+                return (variable, expr, rest)
+            return (None, None, None)
+        def variable_shorthand(tokens, op):
+            if len(tokens) >= 3:
+                name = tokens[0]
+                is_var = self.is_variable_name(name)
+                tokens = tokens[1:]
+                if not is_var:
+                    return (None, None, None)
+                if op:
+                    if op != tokens[0].word:
+                        return (None, None, None)
+                    tokens = tokens[1:]
+                if tokens[0].word != '=':
+                    return (None, None, None)
+                variable = VariableReference(name.word)
+                expr = Expression()
+                tokens = expr.ast(tokens[1:])
+                new_type = expr.type_eval()
+                SyntaxModule.memory.update_variable(name.word, new_type)
+                return (variable, expr, tokens)
+            return (None, None, None)
+        arr = array_shorthand(tokens, op)
+        if arr[0]:
+            return arr
+        var = variable_shorthand(tokens, op)
+        return var
+    
+    def translate_variable_statement(self, variable):
+        if isinstance(variable, VariableReference):
+            return f'{variable.name}'
+        elif isinstance(variable, ArraySubscription):
+            index = SyntaxModule.compute.truncate(variable.index.numberify())
+            prefix = SyntaxModule.reserved_variable
+            helper_var = f'{prefix}{variable.name}={index}'
+            main_var = f'{variable.name}[${prefix}{variable.name}]'
+            return '\n'.join([helper_var, main_var])
+        return
 
     def parse_binop(self, tokens, ops):
         def is_binop(tokens):
@@ -85,6 +128,9 @@ class SyntaxModule:
                 if token.word == ops[0]:
                     tokens_slice = tokens[index:index + len(ops)]
                     words = list(map(lambda t: t.word, tokens_slice))
+                    # Omit shorthand operations
+                    if tokens[index + len(ops)].word == '=':
+                        return None
                     if words == ops and not gen:
                         return index
         if len(tokens) >= 3:
@@ -104,6 +150,8 @@ class SyntaxModule:
         return (None, None, None)
 
     def clear_empty_lines(self, tokens):
+        if not tokens:
+            return None
         while len(tokens) and tokens[0].word == '\n':
             tokens = tokens[1:]
         return tokens
@@ -204,10 +252,12 @@ class Expression(SyntaxModule):
     def __init__(self):
         self.expr = None
         self.modules = [
-            Sum, Sub, Mul, Div, Mod, Not,
-            Or, And, Eq, Neq, Gt, Gte, Lt, Lte, Return,
+            Or, And,
+            Eq, Neq, Gt, Gte, Lt, Lte,
+            Sum, Sub, Mul, Div, Mod, Not, Return,
             Parenthesis, FunctionCall, Number, Text, Boolean,
-            ShellCommand, ShellStatus, Array, VariableReference
+            ArraySubscription, ShellCommand, ShellStatus, Array,
+            VariableReference
         ]
     
     def ignore(self):

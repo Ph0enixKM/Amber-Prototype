@@ -1,9 +1,9 @@
 # Variable definition
-box myVar = 20
+let myVar = 20
 # Arithmetics (with float support)
-box calc = myVar / 8
+let calc = myVar / 8
 # Arrays and Texts
-box myFruits = ['apple', 'orange', 'banana']
+let myFruits = ['apple', 'orange', 'banana']
 # if statements
 if calc > 2 {
     # Assignment to 
@@ -11,12 +11,13 @@ if calc > 2 {
     myVar = false
 }
 # Single line else block
-else:
+else
     myVar = true
 # endless loop
 loop {
     calc += 1
-    if calc > 15: break
+    if calc > 15
+        break
 }
 # array loop
 loop fruit in myFruits {
@@ -38,7 +39,7 @@ print(status)
 # Run Embedded Bash code silently (statement)
 silent $ very_annoying_command $
 # Save standard output to variable
-box std = $ ls -a $
+let std = $ ls -a $
 # Save standard error to variable
-box err = error $ this_will_error $
+let err = error $ this_will_error $
 

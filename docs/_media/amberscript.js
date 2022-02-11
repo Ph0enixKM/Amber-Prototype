@@ -1,7 +1,7 @@
 Prism.languages.amberscript = Prism.languages.extend('clike', {
 	'keyword': [
 		{
-			pattern: /\b(error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|box)\b/,
+			pattern: /\b(error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let)\b/,
 			lookbehind: false
 		}
 	],
@@ -86,8 +86,8 @@ Prism.languages.insertBefore('amberscript', 'string', {
 		greedy: true,
 		alias: 'comment'
 	},
-	'string': {
-		pattern: /'(?:\\[\s\S]|\{(?:[^{}]|\{(?:[^{}]|\{[^}]*\})*\})+\}|(?!\{)[^\\'])*'/,
+	'text': {
+		pattern: /'(?:\\[\s\S]|\{(?:[^{}]|\{(?:[^{}]|\{[^}]*\})*\})+\}|(?!\{)[^'])*'/,
 		greedy: true,
 		inside: {
 			'template-punctuation': {
@@ -106,7 +106,7 @@ Prism.languages.insertBefore('amberscript', 'string', {
 				}
 			},
 			'string': /[\s\S]+/
-		}
+		},
 	},
 	'command': {
 		pattern: /\$(?:\\[\s\S]|\{(?:[^{}]|\{(?:[^{}]|\{[^}]*\})*\})+\}|(?!\{)[^\\$])*\$/,

@@ -2,7 +2,7 @@
 	"name": "amberscript-language",
 	"displayName": "AmberScript Language",
 	"description": "AmberScript language support",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"publisher": "Ph0enixKM",
 	"engines": {
 		"vscode": "^1.28.0"

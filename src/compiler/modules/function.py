@@ -28,7 +28,7 @@ class Function(SyntaxModule):
                     continue
                 if word == ')':
                     break
-                if self.is_variable_name(word):
+                if self.is_variable_name(rest[0]):
                     self.params.append(word)
                     SyntaxModule.memory.add_variable(word, Type.Text)
                 else:
@@ -57,7 +57,7 @@ class FunctionCall(SyntaxModule):
     def ast(self, tokens):
         if len(tokens) >= 3:
             [fun, *rest] = tokens
-            is_var = self.is_variable_name(fun.word)
+            is_var = self.is_variable_name(fun)
             if not is_var or rest[0].word != '(':
                 return None
             if not SyntaxModule.memory.has_fun(fun.word):
@@ -83,14 +83,23 @@ class FunctionCall(SyntaxModule):
         return f'{self.name} {" ".join(params)}'
 
 class Return(SyntaxModule):
+    def __init__(self):
+        self.value = None
+
     def ast(self, tokens):
         if len(tokens):
             if tokens[0].word != 'return':
                 return None
             if not SyntaxModule.memory.is_fun_context():
                 error_tok(tokens[0], 'Return can only be used inside of functions')
-            return tokens[1:]
+            tokens = tokens[1:]
+            if tokens[0].word != '\n':
+                self.value = Expression()
+                tokens = self.value.ast()
+            return tokens
     
     def translate(self):
+        if self.value:
+            return f'return {self.value.numberify()}'
         return 'return'
     

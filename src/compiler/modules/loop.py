@@ -26,7 +26,7 @@ class Loop(SyntaxModule):
                 (self.block, tokens) = self.parse_block(tokens, loop_scope=True)
                 return tokens
             # For loop
-            is_var = self.is_variable_name(tokens[0].word)
+            is_var = self.is_variable_name(tokens[0])
             if is_var and tokens[1].word == 'in':
                 self.iterator = tokens[0].word
                 tokens = tokens[1:]

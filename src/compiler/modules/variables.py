@@ -12,9 +12,9 @@ class Variable(SyntaxModule):
     def ast(self, tokens):
         if len(tokens) > 3:
             [key, name, eq, *exp] = tokens
-            if key.word != 'box' or eq.word != '=':
+            if key.word != 'let' or eq.word != '=':
                 return None
-            if not self.is_variable_name(name.word):
+            if not self.is_variable_name(name, error=True):
                 error_tok(name, ErrorTypes.VAR.value)
             if SyntaxModule.memory.has_double_variable(name.word):
                 error_tok(name, f'Variable "{name.word}" already exists in this scope')
@@ -42,7 +42,7 @@ class VariableReference(SyntaxModule):
     def ast(self, tokens):
         if len(tokens):
             name = tokens[0]
-            if not self.is_variable_name(name.word):
+            if not self.is_variable_name(name):
                 return None
             if not SyntaxModule.memory.has_variable(name.word):
                 error_tok(name, f'Variable "{name.word}" does not exist')
@@ -63,3 +63,33 @@ class VariableReference(SyntaxModule):
     
     def arraify(self):
         return f'${{{self.name}[@]}}'
+
+
+class ArraySubscription(SyntaxModule):
+    def __init__(self):
+        self.name = ''
+        self.index = None
+    
+    def ast(self, tokens):
+        if len(tokens) >= 3:
+            [name, sq, *rest] = tokens
+            if not self.is_variable_name(name):
+                return None
+            if sq.word != '[':
+                return None
+            if not SyntaxModule.memory.has_variable(name.word):
+                error_tok(name, f'Variable "{name.word}" does not exist')
+            self.index = Expression()
+            rest = self.index.ast(rest)
+            self.var_type = SyntaxModule.memory.get_variable_type(name.word)
+            self.name = name.word
+            if rest[0].word != ']':
+                error_tok(name, f'Expected "]"')
+            return rest[1:]
+    
+    def type_eval(self):
+        return Type.Text
+    
+    def translate(self):
+        normalized = SyntaxModule.compute.truncate(self.index.numberify())
+        return f'${{{self.name}[{normalized}]}}'

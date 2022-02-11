@@ -103,7 +103,7 @@ class Text(SyntaxModule):
         return Type.Text
     
     def numberify(self):
-        return str(len(self.translate()))
+        return str(len(self.translate()) - 2)
 
 
 class Array(SyntaxModule):

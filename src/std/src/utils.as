@@ -22,3 +22,29 @@ fun split(text, by) {
     }
     toArray($ printf '%s' \$\{text//\$\{by}/,} $)
 }
+
+fun download(url, target) {
+    fun downloadRuby(url, target) {
+        let code = 'require "open-uri"; open("{target}", "wb") do |file|; file << open("{url}").read; end'
+        $ ruby -e "{code}" $
+    }
+
+    fun downloadCurl(url, target) {
+        silent $ curl -o "{target}" "{url}" $
+    }
+
+    fun downloadWget(url, target) {
+        $ wget -O "{target}" "{url}" $
+    }
+
+    silent $ wget -v $
+    let wgetStatus = status
+    silent $ ruby -v $
+    let rubyStatus = status
+    silent $ curl -v $
+    let curlStatus = status
+
+    if rubyStatus == 0 downloadRuby(url, target)
+    else if curlStatus == 0 downloadCurl(url, target)
+    else if wgetStatus == 0 downloadWget(url, target)
+}

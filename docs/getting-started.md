@@ -4,7 +4,6 @@
 Make sure that your operating system satisfies the follorwing prerequsites
 - Bash or Zsh or any other Bourne-again shell *(usually comes with MacOS)*
 - Ruby 2.0 or newer *(usually comes with MacOS)*
-- Python 3.9 or newer
 ```bash
 $(ruby -e "require 'open-uri'; puts open('https://raw.githubusercontent.com/Ph0enixKM/AmberScript/master/install.sh').read")
 ```
@@ -13,7 +12,6 @@ $(ruby -e "require 'open-uri'; puts open('https://raw.githubusercontent.com/Ph0e
 Make sure that your operating system satisfies the follorwing prerequsites
 - Bash or Zsh or any other Bourne-again shell
 - Curl tool for downloading the installation script
-- Python 3.9 or newer
 ```bash
 curl https://raw.githubusercontent.com/Ph0enixKM/AmberScript/master/install.sh | bash
 ```

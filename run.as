@@ -9,9 +9,13 @@ fun build() {
         sh exit()
     }
 
+    # Copy license and remove zip
+    sh cd('..')
+    silent $ rm amberscript.zip $
+    sh cp('LICENSE', 'build/LICENSE')
+
     # Package the build
-    sh cd('../build')
-    sh rm('amberscript.zip')
+    sh cd('build')
     $ zip -r -q ../amberscript.zip ./ $
 }
 

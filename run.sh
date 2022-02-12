@@ -37,7 +37,10 @@ if [ $(bc -l <<< "$? != 0.0") != 0 ]; then
 echo ${err[@]}
 exit 
 fi
-cd "../build"
+cd ".."
+ rm amberscript.zip  > /dev/null 2>&1
+cp "LICENSE" "build/LICENSE"
+cd "build"
  zip -r -q ../amberscript.zip ./ 
 }
 attr=$( echo $1 )

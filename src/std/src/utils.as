@@ -23,7 +23,7 @@ fun split(text, by) {
     toArray($ printf '%s' \$\{text//\$\{by}/,} $)
 }
 
-fun download(url, target) {
+fun downloadFile(url, target) {
     fun downloadRuby(url, target) {
         let code = 'require "open-uri"; open("{target}", "wb") do |file|; file << open("{url}").read; end'
         $ ruby -e "{code}" $

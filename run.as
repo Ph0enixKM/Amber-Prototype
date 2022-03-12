@@ -26,6 +26,3 @@ if attr == 'build'
     build()
 else
     $ python3 src/main.py \$@ $
-
-if 12 > 5:
-    print('TEST')

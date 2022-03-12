@@ -48,3 +48,7 @@ fun downloadFile(url, target) {
     else if curlStatus == 0 downloadCurl(url, target)
     else if wgetStatus == 0 downloadWget(url, target)
 }
+
+fun int(number) {
+    $ echo -n \$\{number%.*}$
+}

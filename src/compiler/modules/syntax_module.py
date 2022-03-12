@@ -55,6 +55,8 @@ class SyntaxModule:
                 res = block.ast(tokens[2:])
                 return (block, res)
             # Singleline block
+            if tokens[0].word == ':':
+                tokens = tokens[1:]
             tokens = self.clear_empty_lines(tokens)
             SyntaxModule.memory.enter_scope(loop_scope=loop_scope)
             st = Statement()
@@ -150,8 +152,6 @@ class SyntaxModule:
         return (None, None, None)
 
     def clear_empty_lines(self, tokens):
-        if not tokens:
-            return None
         while len(tokens) and tokens[0].word == '\n':
             tokens = tokens[1:]
         return tokens
@@ -254,7 +254,7 @@ class Expression(SyntaxModule):
         self.modules = [
             Or, And,
             Eq, Neq, Gt, Gte, Lt, Lte,
-            Sum, Sub, Mul, Div, Mod, Not, Return,
+            Sum, Sub, Mul, Div, Mod, Not, Return, Range,
             Parenthesis, FunctionCall, Number, Text, Boolean,
             ArraySubscription, ShellCommand, ShellStatus, Array,
             VariableReference

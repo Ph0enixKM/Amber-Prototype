@@ -1,7 +1,7 @@
 Prism.languages.amberscript = Prism.languages.extend('clike', {
 	'keyword': [
 		{
-			pattern: /\b(error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let|sh)\b/,
+			pattern: /\b(to|error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let|sh)\b/,
 			lookbehind: false
 		}
 	],

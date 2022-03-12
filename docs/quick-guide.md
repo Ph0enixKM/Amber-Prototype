@@ -34,8 +34,8 @@ let code = status
 let mywebsite = silent $ curl http://example.com $
 ```
 
-As you might remember from getting started guide - we used a *shell function call*.
-This is alpha equivalent to just invoking command with no parameters.
+AmberScript provides a syntactic sugar for calling simple commands in a form of *shell function calls*.
+This is alpha equivalent to just calling command as if it was defined somewhere in the code (but compiler has no ability how to check at compile time if that command exists).
 
 ```amberscript
 $ echo hello $ == sh echo('hello')
@@ -73,20 +73,41 @@ $ echo {message}! $
 'This {'is a {'fun'} thing'} to do'
 ```
 
+## Ranges
+Ranges exist to generate iterative sequences starting from one and then counting all the way up to the other. The range is inclusive - meaning it does count in provided bounds. Let's see range in action.
+
+```amberscript
+# Simple range
+1 to 10
+
+# You can also count down
+let myRange = 15 to 10
+print(myRange)
+```
+
+
 ## Loops
 There are 3 types of loops in AmberScript. The simplest one is an infinite loop, another one is a "while" loop and third one the "for in" loop.
 
 ```amberscript
+# This loop will never stop
 loop {
     sh echo('Over and over...')
 }
 
+# This will loop while a is smaller than hundred
 loop age < 100 {
-    sh echo(Living in progress...')
+    sh echo('Living in progress...')
 }
 
+# This will tell you to buy each fruit in the list of fruits
 loop fruit in fruits {
     sh echo('Buy {fruit}!')
+}
+
+# This will count down the rocket liftoff (please don't use this language to do that in production)
+loop number in 10 to 1 {
+    sh echo('Counting down {number}')
 }
 ```
 

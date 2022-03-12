@@ -47,7 +47,7 @@
 			},	
 			{
 				"name": "keyword.control.amberscript",
-				"match": "\\b(error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let|sh)\\b"
+				"match": "\\b(to|error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let|sh)\\b"
 			},
 			{
 				"match": "\\b(true|false)\\b(?![?!])",
@@ -71,7 +71,7 @@
 			},
 			{
 				"name" : "support.function.git-rebase.amberscript.symbol",
-				"match" : "(\\+|\\-|\\^|\\*|\\=|\\||\\%|!)"
+				"match" : "(\\+|\\-|\\^|\\*|\\=|\\||\\%|!|>|<)"
 			},
 			{
 				"name" : "comment.block",

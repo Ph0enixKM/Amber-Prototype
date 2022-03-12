@@ -1,3 +1,4 @@
+from cmath import log
 from error import error_tok, ErrorTypes
 from .syntax_module import SyntaxModule, Expression
 from ..type import Type
@@ -29,12 +30,9 @@ class Number(SyntaxModule):
     
     def type_eval(self):
         return Type.Number
-    
-    def stringify(self):
-        return str(self.value).rstrip('0').rstrip('.')
 
     def translate(self):
-        return str(self.value)
+        return str(self.value).rstrip('0').rstrip('.')
 
 
 class Boolean(SyntaxModule):
@@ -146,3 +144,31 @@ class Array(SyntaxModule):
     def arraify(self):
         vals = [val.stringify() for val in self.values]
         return ' '.join(vals)
+
+
+class Range(SyntaxModule):
+    is_range = False
+
+    def __init__(self):
+        self.expr_from = None
+        self.expr_to = None
+    
+    def ast(self, tokens):
+        if len(tokens) > 2 and not Range.is_range:
+            Range.is_range = True
+            self.expr_from = Expression()
+            tokens = self.expr_from.ast(tokens)
+            if tokens[0].word != 'to':
+                Range.is_range = False
+                return None
+            self.expr_to = Expression()
+            Range.is_range = False
+            return self.expr_to.ast(tokens[1:])
+
+    def type_eval(self):
+        return Type.Array
+
+    def translate(self):
+        start = SyntaxModule.compute.truncate(self.expr_from.translate())
+        end = SyntaxModule.compute.truncate(self.expr_to.translate())
+        return f'$(seq {start} {end})'

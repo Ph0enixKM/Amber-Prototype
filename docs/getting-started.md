@@ -23,8 +23,8 @@ Or you can download it here in [the Visual Studio Marketplace website](https://m
 
 
 ## Hello World Example
-One of the first things that programmers do when learning a new programming language is infamous "hello world" program. Here we are using *shell function call* which is not checked by compiler at compiletime if such command exists. But we assume our shell does support `echo` command.
+One of the first things that programmers do when learning a new programming language is infamous "hello world" program. Here we are using function call to display text *Hello World!*.
 
 ```amberscript
-sh echo('Hello World!')
+print('Hello World!')
 ```

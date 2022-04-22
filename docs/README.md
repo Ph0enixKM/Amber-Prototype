@@ -4,9 +4,9 @@ A beautiful, programmer-friendly and modern looking programming language that is
 > The docs are not completely ready yet! Come back soon to see how to install and use it
 
 ## Example usage
-Here is a sample AmberScript code so that you can see how it looks like in action.
+Here is a sample Amber code so that you can see how it looks like in action.
 
-```amberscript
+```amber
 fun fibonacci(num) {
 	let before = 0
 	let actual = 1

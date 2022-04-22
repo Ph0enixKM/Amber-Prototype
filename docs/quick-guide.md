@@ -4,9 +4,9 @@ for you as some form of cheat sheet on top of which you can play around with thi
 
 ## Variables and values
 Variables are mutable, dynamically typed and lifetime-limited to scopes.
-AmberScript handles 4 value types (`Text`, `Number`, `Boolean`, `Array`)
+Amber handles 4 value types (`Text`, `Number`, `Boolean`, `Array`)
 
-```amberscript
+```amber
 let name = 'John'
 let age = 20
 let isAlive = true
@@ -20,7 +20,7 @@ isAlive = (age < 100 and age > 0) or name != 'dead'
 ## Command
 Commands are basically embedded BashScript commands. They evaluate to `Text` type and return standard output. It is possible to add certain flags (`error` which returns standard error, `silent` which supresses any standard or error output and can only be used as a statement). There is also keyword for retrieving exit code of latest command and it's name is `status`.
 
-```amberscript
+```amber
 # Receive stdout
 let files = $ ls $
 # Receive stderr
@@ -34,10 +34,10 @@ let code = status
 let mywebsite = silent $ curl http://example.com $
 ```
 
-AmberScript provides a syntactic sugar for calling simple commands in a form of *shell function calls*.
+Amber provides a syntactic sugar for calling simple commands in a form of *shell function calls*.
 This is alpha equivalent to just calling command as if it was defined somewhere in the code (but compiler has no ability how to check at compile time if that command exists).
 
-```amberscript
+```amber
 $ echo hello $ == sh echo('hello')
 ```
 
@@ -48,7 +48,7 @@ complex arguments, pipes etc.
 If statements are very simple. Just like in c-like languages, it is possible to create 
 blocks containing multiple statements and single-statement ones.
 
-```amberscript
+```amber
 # Multiline blocks
 if age >= 18 {
     sh echo('Welcome')
@@ -62,9 +62,9 @@ if 'something' == name
 ```
 
 ## Text and Command interpolations
-This is how we interpolate strings and variables into commands in AmberScript.
+This is how we interpolate strings and variables into commands in Amber.
 
-```amberscript
+```amber
 let name = 'Pablo'
 let message = 'My name is {name}'
 $ echo {message}! $
@@ -76,7 +76,7 @@ $ echo {message}! $
 ## Ranges
 Ranges exist to generate iterative sequences starting from one and then counting all the way up to the other. The range is inclusive - meaning it does count in provided bounds. Let's see range in action.
 
-```amberscript
+```amber
 # Simple range
 1 to 10
 
@@ -87,9 +87,9 @@ print(myRange)
 
 
 ## Loops
-There are 3 types of loops in AmberScript. The simplest one is an infinite loop, another one is a "while" loop and third one the "for in" loop.
+There are 3 types of loops in Amber. The simplest one is an infinite loop, another one is a "while" loop and third one the "for in" loop.
 
-```amberscript
+```amber
 # This loop will never stop
 loop {
     sh echo('Over and over...')
@@ -114,7 +114,7 @@ loop number in 10 to 1 {
 ## Functions
 Creating and calling functions. Functions can take any amount of parameters. They are immutable and can return string value throught the standard output (just like in bash) and can return exit code (using `return` keyword)
 
-```amberscript
+```amber
 fun fooBaz(n) {
     let index = 1
     loop index <= n {

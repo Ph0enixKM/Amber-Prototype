@@ -9,7 +9,7 @@ std = 'std.bin'
 
 def compile_std():
     dir = path.dirname(path.realpath(__file__))
-    std_files = ['io.as', 'utils.as']
+    std_files = ['io.amber', 'utils.amber']
     statements = []
     for std_file in std_files:
         with open(f'{dir}/src/{std_file}', 'r') as file:

@@ -6,8 +6,8 @@ from std import compile_std, load_std
 import json
 
 class CLI:
-    lang = 'amberscript'
-    name = 'AmberScript Compiler'
+    lang = 'amber'
+    name = 'Amber Compiler'
     version = '1.0.0'
 
     def __init__(self):

@@ -1,7 +1,7 @@
 {
     "Loop In": {
         "prefix": "loopin",
-        "scope": "amberscript, soruce.amberscript",
+        "scope": "amber, soruce.amber",
         "body": [
           "loop ${1:iter} in ${2:iterable} {",
           "\t$0",
@@ -11,7 +11,7 @@
     },
     "Loop While": {
         "prefix": "loopwhile",
-        "scope": "amberscript, soruce.amberscript",
+        "scope": "amber, soruce.amber",
         "body": [
           "loop ${1:condition} {",
           "\t$0",
@@ -21,7 +21,7 @@
     },
     "Loop": {
         "prefix": "loop",
-        "scope": "amberscript, soruce.amberscript",
+        "scope": "amber, soruce.amber",
         "body": [
           "loop {",
           "\t$0",
@@ -31,7 +31,7 @@
     },
     "If": {
         "prefix": "if",
-        "scope": "amberscript, soruce.amberscript",
+        "scope": "amber, soruce.amber",
         "body": [
           "if ${1:condition} {",
           "\t$0",
@@ -41,7 +41,7 @@
     },
     "Function": {
         "prefix": "fun",
-        "scope": "amberscript, soruce.amberscript",
+        "scope": "amber, soruce.amber",
         "body": [
           "fun ${2:name}(${3:params}) {",
           "\t$0",

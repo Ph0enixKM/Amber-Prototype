@@ -3,11 +3,11 @@
 </div>
 
 
-# AmberScript Compiler
-A programmer-friendly language that compiles to BashScript.
+# Amber Compiler
+A programmer-friendly language that compiles to Bash.
 
 ## Example usage
 
 <div align="center">
-    <img src="vsc-syntax/images/amber-script.png" style="border-radius: 20px; margin-top: 10px" width="600">
+    <img src="vsc-syntax/images/amber.png" style="border-radius: 20px; margin-top: 10px" width="600">
 </div>

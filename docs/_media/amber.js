@@ -1,4 +1,4 @@
-Prism.languages.amberscript = Prism.languages.extend('clike', {
+Prism.languages.amber = Prism.languages.extend('clike', {
 	'keyword': [
 		{
 			pattern: /\b(to|error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let|sh)\b/,
@@ -80,7 +80,7 @@ Prism.languages.insertBefore('amberscript', 'keyword', {
 	'constant': /\b[A-Z](?:[A-Z_]|\dx?)*\b/
 });
 
-Prism.languages.insertBefore('amberscript', 'string', {
+Prism.languages.insertBefore('amber', 'string', {
 	'hashbang': {
 		pattern: /^#!.*/,
 		greedy: true,
@@ -148,7 +148,7 @@ Prism.languages.insertBefore('amberscript', 'string', {
 	}
 });
 
-Prism.languages.insertBefore('amberscript', 'operator', {
+Prism.languages.insertBefore('amber', 'operator', {
 	'literal-property': {
 		pattern: /((?:^|[,{])[ \t]*)(?!\s)[_$a-zA-Z\xA0-\uFFFF](?:(?!\s)[$\w\xA0-\uFFFF])*(?=\s*:)/m,
 		lookbehind: true,
@@ -156,4 +156,4 @@ Prism.languages.insertBefore('amberscript', 'operator', {
 	},
 });
 
-Prism.languages.as = Prism.languages.amberscript;
+Prism.languages.as = Prism.languages.amber;

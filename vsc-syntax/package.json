@@ -1,8 +1,8 @@
 {
-	"name": "amberscript-language",
-	"displayName": "AmberScript Language",
-	"description": "AmberScript language support",
-	"version": "1.1.1",
+	"name": "amber-language",
+	"displayName": "Amber Language",
+	"description": "Amber language support",
+	"version": "1.2.0",
 	"publisher": "Ph0enixKM",
 	"engines": {
 		"vscode": "^1.28.0"
@@ -19,14 +19,12 @@
 	"contributes": {
 		"languages": [
 			{
-				"id": "amberscript",
+				"id": "amber",
 				"aliases": [
-					"AmberScript",
-					"amberscript"
+					"Amber",
+					"amber"
 				],
 				"extensions": [
-					".as",
-					".ams",
 					".amber"
 				],
 				"configuration": "./language-configuration.json"
@@ -34,14 +32,14 @@
 		],
 		"grammars": [
 			{
-				"language": "amberscript",
-				"scopeName": "source.amberscript",
-				"path": "./syntaxes/amberscript.tmLanguage.json"
+				"language": "amber",
+				"scopeName": "source.amber",
+				"path": "./syntaxes/amber.tmLanguage.json"
 			}
 		],
 		"snippets": [
 			{
-				"language": "amberscript",
+				"language": "amber",
 				"path": "./snippets/snippets.json"
 			}
 		]

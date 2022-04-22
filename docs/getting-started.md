@@ -17,7 +17,7 @@ curl https://raw.githubusercontent.com/Ph0enixKM/AmberScript/master/install.sh |
 ```
 
 ## Syntax Highlighting
-You can install syntax highlighting for Visual Studio Code. You can find it in Visual Studio Code extension store under the name `AmberScript Language`.
+You can install syntax highlighting for Visual Studio Code. You can find it in Visual Studio Code extension store under the name `Amber Language`.
 
 Or you can download it here in [the Visual Studio Marketplace website](https://marketplace.visualstudio.com/items?itemName=Ph0enixKM.amberscript-language).
 

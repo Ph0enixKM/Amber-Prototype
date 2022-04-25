@@ -158,7 +158,7 @@ class Range(SyntaxModule):
             Range.is_range = True
             self.expr_from = Expression()
             tokens = self.expr_from.ast(tokens)
-            if tokens[0].word != 'to':
+            if not len(tokens) or tokens[0].word != 'to':
                 Range.is_range = False
                 return None
             self.expr_to = Expression()

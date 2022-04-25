@@ -1,6 +1,41 @@
 function print {
 local text=$1
- echo $text 
+echo "${text[@]}"
+}
+function bold {
+local text=$1
+print "${text[@]}"
+echo "\033[1m$text\033[0m"
+}
+function color {
+local text=$1
+local color=$2
+local col=""
+if [ $([ _$color != _"black" ]; echo $?) != 0 ]; then
+col="\033[1;30m"
+fi
+if [ $([ _$color != _"red" ]; echo $?) != 0 ]; then
+col="\033[1;31m"
+fi
+if [ $([ _$color != _"green" ]; echo $?) != 0 ]; then
+col="\033[1;32m"
+fi
+if [ $([ _$color != _"yellow" ]; echo $?) != 0 ]; then
+col="\033[1;33m"
+fi
+if [ $([ _$color != _"blue" ]; echo $?) != 0 ]; then
+col="\033[1;34m"
+fi
+if [ $([ _$color != _"magenta" ]; echo $?) != 0 ]; then
+col="\033[1;35m"
+fi
+if [ $([ _$color != _"cyan" ]; echo $?) != 0 ]; then
+col="\033[1;36m"
+fi
+if [ $([ _$color != _"white" ]; echo $?) != 0 ]; then
+col="\033[1;37m"
+fi
+echo "$col$text\033[0m"
 }
 function toArray {
 local iterable=$1
@@ -11,7 +46,7 @@ if [ $([ _$letter != _"," ]; echo $?) != 0 ]; then
 printf "%s" " "
 continue
 fi
-printf "%s" ${letter[@]}
+printf "%s" "${letter[@]}"
 done
 }
 function split {
@@ -24,11 +59,11 @@ local letter=$( printf '%s' "${text:index - 1:1}" )
 if [ $(bc -l <<< "$index != 1") != 0 ]; then
 printf "%s" " "
 fi
-printf "%s" ${letter[@]}
+printf "%s" "${letter[@]}"
 done
 return $(echo "0/1" | bc)
 fi
-toArray $( printf '%s' ${text//${by}/,} )
+toArray "$( printf '%s' ${text//${by}/,} )"
 }
 function downloadFile {
 local url=$1
@@ -56,13 +91,13 @@ local rubyStatus=$?
  curl -v  > /dev/null 2>&1
 local curlStatus=$?
 if [ $(bc -l <<< "$rubyStatus == 0") != 0 ]; then
-downloadRuby ${url[@]} ${target[@]}
+downloadRuby "${url[@]}" "${target[@]}"
 else
 if [ $(bc -l <<< "$curlStatus == 0") != 0 ]; then
-downloadCurl ${url[@]} ${target[@]}
+downloadCurl "${url[@]}" "${target[@]}"
 else
 if [ $(bc -l <<< "$wgetStatus == 0") != 0 ]; then
-downloadWget ${url[@]} ${target[@]}
+downloadWget "${url[@]}" "${target[@]}"
 fi
 fi
 fi
@@ -73,9 +108,17 @@ local number=$1
 }
 tag="1.0.0"
 place="/opt/amber"
-url="https://github.com/Ph0enixKM/AmberScript/releases/download/$tag/amber.zip"
- mkdir /opt/amber  > /dev/null 2>&1
-downloadFile ${url[@]} "$place/amber.zip"
+if [ $([ _$(whoami ) = _"root" ]; echo $?) != 0 ]; then
+text=$(bold "Please run the installer as a root.")
+color "${text[@]}" "red"
+print "
+        This installer requires access to /opt and /bin directories
+        in order to install this software properly"
+exit 
+fi
+url="https://github.com/Ph0enixKM/Amber/releases/download/$tag/amber.zip"
+mkdir $place  > /dev/null 2>&1
+sudo $(downloadFile "${url[@]}" "amber.zip") 
 unzip "$place/amber.zip"
 rm "amber.zip"
  ln -s -T $place/main /bin/amber 

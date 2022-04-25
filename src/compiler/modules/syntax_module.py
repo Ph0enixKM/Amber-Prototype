@@ -179,6 +179,13 @@ class SyntaxModule:
             else:
                 new[item] = root[item]
         return new
+    
+    # Ensure that passed translation is in a string format
+    def ensure_string(self, text):
+        [first, *_, last] = text
+        if first == '"' and last == '"':
+            return text
+        return f'"{text}"'
 
 
 class Block(SyntaxModule):

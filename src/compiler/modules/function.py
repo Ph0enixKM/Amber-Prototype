@@ -81,7 +81,7 @@ class FunctionCall(SyntaxModule):
             return rest[1:]
 
     def translate(self):
-        params = [param.arraify() for param in self.params]
+        params = [self.ensure_string(param.arraify()) for param in self.params]
         return f'$({self.name} {" ".join(params)})'
 
 
@@ -119,7 +119,7 @@ class FunctionCallStatement(SyntaxModule):
             return rest[1:]
 
     def translate(self):
-        params = [param.arraify() for param in self.params]
+        params = [self.ensure_string(param.arraify()) for param in self.params]
         return f'{self.name} {" ".join(params)}'
 
 class Return(SyntaxModule):

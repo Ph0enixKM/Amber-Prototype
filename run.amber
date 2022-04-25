@@ -16,6 +16,7 @@ fun build() {
 
     # Package the build
     sh cd('build')
+    sh mv('main', 'amber')
     $ zip -r -q ../amber.zip ./ $
 }
 

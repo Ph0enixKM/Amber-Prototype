@@ -10,7 +10,7 @@ class Scope:
         self.fun_scope = fun_scope
     
     def __repr__(self):
-        return f'[{", ".join(self.vars.keys())}]'
+        return f'[{", ".join(self.vars.keys())} : {", ".join(self.funs)}]'
 
 class Memory:
     def __init__(self):

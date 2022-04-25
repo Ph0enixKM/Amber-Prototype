@@ -13,7 +13,7 @@ build_exe = {
 setup(
     name = 'amber',
     version = '0.1',
-    description = 'AmberScript compiler',
+    description = 'Amber compiler',
     executables = [Executable('main.py')],
     options = {'build_exe': build_exe}
 )

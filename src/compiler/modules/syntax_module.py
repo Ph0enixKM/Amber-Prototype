@@ -182,9 +182,10 @@ class SyntaxModule:
 
 
 class Block(SyntaxModule):
-    def __init__(self, loop_scope=False):
+    def __init__(self, loop_scope=False, is_global=False):
         self.statements = []
         self.loop_scope = loop_scope
+        self.is_global = is_global
     
     def leave_block(self, tokens):
         SyntaxModule.memory.leave_scope()
@@ -193,7 +194,8 @@ class Block(SyntaxModule):
 
     def ast(self, tokens):
         rest = tokens
-        SyntaxModule.memory.enter_scope(self.loop_scope)
+        if not self.is_global or not len(SyntaxModule.memory.scopes):
+            SyntaxModule.memory.enter_scope(self.loop_scope)    
         while len(rest):
             rest = self.clear_empty_lines(rest)
             # End of line feed

@@ -1,5 +1,15 @@
+# Python Related
 __pycache__/
-vsc-syntax/*.vsix
+
+# MacOS Related
 **/.DS_Store
+
+# Remove builds
 build/
-amberscript.zip
+*.zip
+vsc-syntax/*.vsix
+
+# Leave just the installer / uninstaller
+*.sh
+!install.sh
+!uninstall.sh

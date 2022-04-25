@@ -2,14 +2,14 @@
 	"name": "amber-language",
 	"displayName": "Amber Language",
 	"description": "Amber language support",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"publisher": "Ph0enixKM",
 	"engines": {
 		"vscode": "^1.28.0"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Ph0enixKM/AmberScript.git"
+		"url": "https://github.com/Ph0enixKM/Amber.git"
 	},
 	"author": "Paweł Karaś",
 	"categories": [

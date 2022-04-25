@@ -4,7 +4,7 @@ from .modules import *
 class Parser:
     def __init__(self, lexem):
         self.lexem = lexem
-        self.expr = Block()
+        self.expr = Block(is_global=True)
 
     def parser(self):
         self.expr.ast(self.lexem)

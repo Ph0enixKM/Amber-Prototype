@@ -1,0 +1,13 @@
+let tag = '1.0.0'
+let place = '/opt/amber'
+
+# Temporary
+sh print('Comming soon')
+sh exit()
+
+let url = 'https://github.com/Ph0enixKM/AmberScript/releases/download/{tag}/amber.zip'
+silent $ mkdir /opt/amber $
+downloadFile(url, '{place}/amber.zip')
+sh unzip('{place}/amber.zip')
+sh rm('amber.zip')
+$ ln -s -T {place}/main /bin/amber $

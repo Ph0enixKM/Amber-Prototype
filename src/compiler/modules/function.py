@@ -17,9 +17,6 @@ class Function(SyntaxModule):
             self.name = name.word
             if rest[0].word != '(':
                 error_tok(rest[0], 'Expected "(" symbol')
-            # Enable overshadowing functions on the same level
-            # if SyntaxModule.memory.has_double_fun(self.name):
-            #     error_tok(rest[0], f'Function "{self.name}" already exists in this scope')
             SyntaxModule.memory.add_fun(self.name)
             SyntaxModule.memory.enter_scope(fun_scope=True)
             while len(rest):

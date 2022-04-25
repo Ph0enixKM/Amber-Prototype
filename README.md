@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="vsc-syntax/images/icon.png" width=256>
+    <img src="vsc-syntax/images/icon.png" width="256">
 </div>
 
 

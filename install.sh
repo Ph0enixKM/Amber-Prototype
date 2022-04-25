@@ -73,8 +73,6 @@ local number=$1
 }
 tag="1.0.0"
 place="/opt/amber"
-print "Comming soon"
-exit 
 url="https://github.com/Ph0enixKM/AmberScript/releases/download/$tag/amber.zip"
  mkdir /opt/amber  > /dev/null 2>&1
 downloadFile ${url[@]} "$place/amber.zip"

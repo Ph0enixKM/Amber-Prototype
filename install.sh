@@ -4,7 +4,6 @@ echo "${text[@]}"
 }
 function bold {
 local text=$1
-print "${text[@]}"
 echo "\033[1m$text\033[0m"
 }
 function color {
@@ -108,17 +107,32 @@ local number=$1
 }
 tag="1.0.0"
 place="/opt/amber"
-if [ $([ _$(whoami ) = _"root" ]; echo $?) != 0 ]; then
-text=$(bold "Please run the installer as a root.")
-color "${text[@]}" "red"
-print "
-        This installer requires access to /opt and /bin directories
-        in order to install this software properly"
+url="https://github.com/Ph0enixKM/Amber/releases/download/$tag/amber.zip"
+ test -d "$place"  > /dev/null 2>&1
+if [ $(bc -l <<< "! $?") != 0 ]; then
+color "Amber already installed" "yellow"
+print "It seems that Amber is already installed on your system."
+print "If you want to reinstall Amber - try to uninstall it first."
+print "(Find out more at https://amber.marbl.cc)"
 exit 
 fi
-url="https://github.com/Ph0enixKM/Amber/releases/download/$tag/amber.zip"
-mkdir $place  > /dev/null 2>&1
-sudo $(downloadFile "${url[@]}" "amber.zip") 
-unzip "$place/amber.zip"
-rm "amber.zip"
- ln -s -T $place/main /bin/amber 
+if [ $([ _$(whoami ) = _"root" ]; echo $?) != 0 ]; then
+color "Please run the installer as a root." "yellow"
+print "This installer requires access to $(bold "/opt") and $(bold "/bin") directories"
+print "in order to install this software properly"
+exit 
+fi
+function main {
+print "Downloading..."
+downloadFile "${url[@]}" "amber.zip"
+ sudo mkdir $place  > /dev/null 2>&1
+ sudo mv amber.zip $place/amber.zip 
+ pushd $place  > /dev/null 2>&1
+print "Unpacking..."
+ sudo unzip $place/amber.zip  > /dev/null 2>&1
+ sudo rm $place/amber.zip 
+ sudo ln -s $place/amber /usr/local/bin/amber 
+ popd $place  > /dev/null 2>&1
+}
+main 
+color "Installed Amber successfully! 🎉" "green"

@@ -5,7 +5,7 @@ Make sure that your operating system satisfies the follorwing prerequsites
 - Bash or Zsh or any other Bourne-again shell *(usually comes with MacOS)*
 - Ruby 2.0 or newer *(usually comes with MacOS)*
 ```bash
-$(ruby -e "require 'open-uri'; puts open('https://raw.githubusercontent.com/Ph0enixKM/Amber/master/install.sh').read")
+ruby -e "require 'open-uri'; puts open('https://raw.githubusercontent.com/Ph0enixKM/Amber/master/install.sh').read" | bash
 ```
 
 ### Linux

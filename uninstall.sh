@@ -106,24 +106,6 @@ local number=$1
  echo -n ${number%.*}
 }
 place="/opt/amber"
-print "Are you sure you want to uninstall Amber? [Y/n]"
-answer=""
-read "answer"
-if [ $(bc -l <<< "$([ _$answer != _"Y" ]; echo $?) || $([ _$answer != _"y" ]; echo $?)") != 0 ]; then
- test -d "$place" 
-if [ $(bc -l <<< "! $?") != 0 ]; then
- sudo rm -rf "$place" 
+ sudo rm -rf "$place"  > /dev/null 2>&1
  sudo rm '/usr/local/bin/amber'  > /dev/null 2>&1
-else
- test -f /usr/local/bin/amber 
-if [ $(bc -l <<< "! $?") != 0 ]; then
-print "It seems that amber was uninstalled"
-print "Do you want to remove the symbol link as well? [Y/n]"
-read "answer"
-if [ $(bc -l <<< "$([ _$answer != _"Y" ]; echo $?) || $([ _$answer != _"y" ]; echo $?)") != 0 ]; then
- sudo rm '/usr/local/bin/amber' 
-fi
-fi
-fi
-fi
 color "Uninstalled Amber successfully! 🎉" "green"

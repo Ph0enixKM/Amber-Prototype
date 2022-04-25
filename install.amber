@@ -13,13 +13,6 @@ if not status {
     sh exit()
 }
 
-if sh whoami() != 'root' {
-    color('Please run the installer as a root.', 'yellow')
-    print('This installer requires access to {bold('/opt')} and {bold('/bin')} directories')
-    print('in order to install this software properly')
-    sh exit()
-}
-
 fun main() {
     print('Downloading...')
     # Download file

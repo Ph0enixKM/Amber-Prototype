@@ -116,12 +116,6 @@ print "If you want to reinstall Amber - try to uninstall it first."
 print "(Find out more at https://amber.marbl.cc)"
 exit 
 fi
-if [ $([ _$(whoami ) = _"root" ]; echo $?) != 0 ]; then
-color "Please run the installer as a root." "yellow"
-print "This installer requires access to $(bold "/opt") and $(bold "/bin") directories"
-print "in order to install this software properly"
-exit 
-fi
 function main {
 print "Downloading..."
 downloadFile "${url[@]}" "amber.zip"

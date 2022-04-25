@@ -1,27 +1,6 @@
 let place = '/opt/amber'
 
-print('Are you sure you want to uninstall Amber? [Y/n]')
-
-let answer = ''
-sh read('answer')
-
-if answer == 'Y' or answer == 'y' {
-    $ test -d "{place}" $
-
-    if not status {
-        $ sudo rm -rf "{place}" $
-        silent $ sudo rm '/usr/local/bin/amber' $
-    }
-    else {
-        $ test -f /usr/local/bin/amber $
-        if not status {
-            print('It seems that amber was uninstalled')
-            print('Do you want to remove the symbol link as well? [Y/n]')
-            sh read('answer')
-            if answer == 'Y' or answer == 'y':
-                $ sudo rm '/usr/local/bin/amber' $
-        }
-    }
-}
+silent $ sudo rm -rf "{place}" $
+silent $ sudo rm '/usr/local/bin/amber' $
 
 color('Uninstalled Amber successfully! 🎉', 'green')

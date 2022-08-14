@@ -50,7 +50,7 @@
 				"match": "\\b(to|error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let|sh)\\b"
 			},
 			{
-				"match": "\\b(true|false)\\b(?![?!])",
+				"match": "\\b(true|false|void)\\b(?![?!])",
 				"name": "constant.language.boolean.amber"
 			},
 			{

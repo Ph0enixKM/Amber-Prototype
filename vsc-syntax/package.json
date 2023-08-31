@@ -2,7 +2,7 @@
 	"name": "amber-language",
 	"displayName": "Amber Language",
 	"description": "Amber language support",
-	"version": "1.2.3",
+	"version": "1.2.4",
 	"publisher": "Ph0enixKM",
 	"engines": {
 		"vscode": "^1.28.0"

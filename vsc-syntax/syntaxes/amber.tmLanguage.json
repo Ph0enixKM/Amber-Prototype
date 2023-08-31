@@ -22,23 +22,11 @@
 		"keywords": {
 			"patterns": [
 			{
-				"match": "(box)\\s+(\\w\\S*)",
-				
-				"captures": {
-					"1" : {
-						"name" : "keyword.control.amber"
-					},
-					"2" : {
-						"name" : "variable.name"
-					}
-				}
-			},
-			{
 				"match": "(fun)\\s+(\\w[^\\(]+)",
 				
 				"captures": {
 					"1" : {
-						"name" : "keyword.control.magma"
+						"name" : "keyword.control.amber"
 					},
 					"2" : {
 						"name" : "entity.name.function"
@@ -47,15 +35,19 @@
 			},	
 			{
 				"name": "keyword.control.amber",
-				"match": "\\b(to|error|status|if|loop|in|silent|return|fun|else|break|continue|and|or|not|let|sh)\\b"
+				"match": "\\b(if|loop|ref|return|fun|else|then|break|continue|and|or|not|let|import|from|pub|main|echo|as|in|fail|failed|status|silent|nameof|is|unsafe)\\b"
 			},
 			{
-				"match": "\\b(true|false|void)\\b(?![?!])",
+				"match": "^#\\[.*\\]$",
+				"name": "comment.compiler.amber"
+			},
+			{
+				"match": "\\b(true|false|null)\\b(?![?!])",
 				"name": "constant.language.boolean.amber"
 			},
 			{
-				"match": "^\\s*\\d+\\s*$",
-				"name": "constant.language.int.amber"
+				"match": "[A-Z][a-z0-9_]+",
+				"name": "entity.name.class.amber"
 			},
 			{
 				"match": "[+-]?([0-9]*[.])?[0-9]+",
@@ -66,12 +58,8 @@
 				"name": "entity.name.function"
 			},
 			{
-				"match": "\\b[A-Z]\\w*\\b",
-				"name": "entity.name.class.capital"
-			},
-			{
 				"name" : "support.function.git-rebase.amber.symbol",
-				"match" : "(\\+|\\-|\\^|\\*|\\=|\\||\\%|!|>|<)"
+				"match" : "(\\+|\\-|\\^|\\*|\\=|\\||\\%|!|>|<|[.]{2}|\\?)"
 			},
 			{
 				"name" : "comment.block",
@@ -129,8 +117,8 @@
 		},
 		"strings": {
 			"name": "string.quoted.single.amber",
-			"begin": "'",
-			"end": "'",
+			"begin": "\"",
+			"end": "\"",
 			"patterns": [
 				{
 					"include": "#string-insides"
@@ -149,29 +137,8 @@
 		},
 		"commentLine" : {
 			"name":"comment.line",
-			"begin" : "#",
-			"end" : "$",
-			"patterns": [
-				{
-					"include": "#todos"
-				}
-			]
-		},
-		"todos" : {
-			"patterns": [
-				{
-					"name": "keyword.control",
-					"match": "\\b(TODO|QUESTION|FIXME)\\:*"
-				},
-				{
-					"name": "variable.name",
-					"match": "\\b(ERROR|IMPORTANT)\\:*"
-				},
-				{
-					"name": "constant.name",
-					"match": "\\b(WARNING)\\:*"
-				}
-			]
+			"begin" : "//",
+			"end" : "$"
 		}
 	},
 	"scopeName": "source.amber"
